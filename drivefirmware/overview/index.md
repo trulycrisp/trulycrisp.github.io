@@ -1,4 +1,4 @@
-# Drive Firmware -Overview
+# Drive Firmware - Overview
 
 ## Hardware
 
