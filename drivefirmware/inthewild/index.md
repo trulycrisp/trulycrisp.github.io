@@ -501,7 +501,7 @@ Overall this module appears to be very well designed and engineered, with a larg
 [^2]: https://media.kasperskycontenthub.com/wp-content/uploads/sites/43/2018/03/08064459/Equation_group_questions_and_answers.pdf
 [^3]: https://www.virustotal.com/gui/file/83d14ce2dcfc852791d20cd78066ba5a2b39eb503e12e33f2ef0b1a46c68de73
 [^4]: https://www.smartmontools.org/wiki/FAQ#OnWindowssmartctlprintsthemessage:...LogReadfailed:Functionnotimplemented
-[^5]: trex_manual.pdf
+[^5]: https://trulycrisp.github.io/drivefirmware/inthewild/trex_manual.pdf
 [^6]: https://web.archive.org/web/20230217034243/http://yura.puslapiai.lt/files/wd/mhdd/
-[^7]: pc3000_wd_marvell_manual.pdf
+[^7]: https://trulycrisp.github.io/drivefirmware/inthewild/pc3000_wd_marvell_manual.pdf
 [^8]: https://www.hddoracle.com/viewtopic.php?f=7&t=1176
