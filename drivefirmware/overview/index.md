@@ -1,4 +1,4 @@
-# Drive Firmware Security - Overview
+# Drive Firmware -Overview
 
 ## Hardware
 
@@ -66,37 +66,16 @@ The command register is used for the actual command opcode ranging from 0 to 0xF
 | Opcode | Name |
 |--------|------|
 | `0x00` | NOP |
-| `0x01` | |
-| `0x02` | |
+| `0x01` to `0x02` | |
 | `0x03` | CFA REQUEST EXTENDED ERROR CODE |
-| `0x04` | |
-| `0x05` | |
+| `0x04` to `0x05` | |
 | `0x06` | DATA SET MANAGEMENT |
 | `0x07` | DATA SET MANAGEMENT XL |
 | `0x08` | DEVICE RESET |
-| `0x09` | |
-| `0x0A` | |
+| `0x09` to `0x0A` | |
 | `0x0B` | REQUEST SENSE DATA EXT |
-| `0x0C` | |
-| `0x0D` | |
-| `0x0E` | |
-| `0x0F` | |
-| `0x10` | RECALIBRATE |
-| `0x11` | RECALIBRATE |
-| `0x12` | GET PHYSICAL ELEMENT STATUS / RECALIBRATE |
-| `0x13` | RECALIBRATE |
-| `0x14` | RECALIBRATE |
-| `0x15` | RECALIBRATE |
-| `0x16` | RECALIBRATE |
-| `0x17` | RECALIBRATE |
-| `0x18` | RECALIBRATE |
-| `0x19` | RECALIBRATE |
-| `0x1A` | RECALIBRATE |
-| `0x1B` | RECALIBRATE |
-| `0x1C` | RECALIBRATE |
-| `0x1D` | RECALIBRATE |
-| `0x1E` | RECALIBRATE |
-| `0x1F` | RECALIBRATE |
+| `0x0C` to `0x0F` | |
+| `0x10` to `0x1F` | RECALIBRATE |
 | `0x20` | READ SECTOR(S) |
 | `0x21` | READ SECTOR(S) (without retry) |
 | `0x22` | READ LONG |
@@ -109,9 +88,7 @@ The command register is used for the actual command opcode ranging from 0 to 0xF
 | `0x29` | READ MULTIPLE EXT |
 | `0x2A` | READ STREAM DMA EXT |
 | `0x2B` | READ STREAM EXT |
-| `0x2C` | |
-| `0x2D` | |
-| `0x2E` | |
+| `0x2C` to `0x2E` | |
 | `0x2F` | READ LOG EXT |
 | `0x30` | WRITE SECTOR(S) |
 | `0x31` | WRITE SECTOR(S) (without retry) |
@@ -137,25 +114,14 @@ The command register is used for the actual command opcode ranging from 0 to 0xF
 | `0x45` | WRITE UNCORRECTABLE EXT |
 | `0x46` | |
 | `0x47` | READ LOG DMA EXT |
-| `0x48` | |
-| `0x49` | |
+| `0x48` to `0x49` | |
 | `0x4A` | ZAC Management In |
-| `0x4B` | |
-| `0x4C` | |
-| `0x4D` | |
-| `0x4E` | |
-| `0x4F` | |
+| `0x4B` to `0x4F` | |
 | `0x50` | FORMAT TRACK |
 | `0x51` | CONFIGURE STREAM |
-| `0x52` | |
-| `0x53` | |
-| `0x54` | |
-| `0x55` | |
-| `0x56` | |
+| `0x52` to `0x56` | |
 | `0x57` | WRITE LOG DMA EXT |
-| `0x58` | |
-| `0x59` | |
-| `0x5A` | |
+| `0x58` to `0x5A` | |
 | `0x5B` | TRUSTED NON-DATA |
 | `0x5C` | TRUSTED RECEIVE |
 | `0x5D` | TRUSTED RECEIVE DMA |
@@ -167,48 +133,18 @@ The command register is used for the actual command opcode ranging from 0 to 0xF
 | `0x63` | NCQ NON-DATA |
 | `0x64` | SEND FPDMA QUEUED |
 | `0x65` | RECEIVE FPDMA QUEUED |
-| `0x66` | |
-| `0x67` | |
-| `0x68` | |
-| `0x69` | |
-| `0x6A` | |
-| `0x6B` | |
-| `0x6C` | |
-| `0x6D` | |
-| `0x6E` | |
-| `0x6F` | |
-| `0x70` | SEEK |
-| `0x71` | SEEK |
-| `0x72` | SEEK |
-| `0x73` | SEEK |
-| `0x74` | SEEK |
-| `0x75` | SEEK |
-| `0x76` | SEEK |
+| `0x66` to `0x6F` | |
+| `0x70` to `0x76` | SEEK |
 | `0x77` | SET DATE & TIME EXT / SEEK |
 | `0x78` | ACCESSIBLE MAX ADDRESS CONFIGURATION / SEEK |
-| `0x79` | SEEK |
-| `0x7A` | SEEK |
-| `0x7B` | SEEK |
+| `0x79` to `0x7B` | SEEK |
 | `0x7C` | REMOVE ELEMENT AND TRUNCATE / SEEK |
 | `0x7D` | RESTORE ELEMENTS AND REBUILD / SEEK |
 | `0x7E` | REMOVE ELEMENT AND MODIFY ZONES / SEEK |
 | `0x7F` | SEEK |
-| `0x80` | Vendor Specific |
-| `0x81` | Vendor Specific |
-| `0x82` | Vendor Specific |
-| `0x83` | Vendor Specific |
-| `0x84` | Vendor Specific |
-| `0x85` | Vendor Specific |
-| `0x86` | Vendor Specific |
+| `0x80` to `0x86` | Vendor Specific |
 | `0x87` | CFA TRANSLATE SECTOR |
-| `0x88` | Vendor Specific |
-| `0x89` | Vendor Specific |
-| `0x8A` | Vendor Specific |
-| `0x8B` | Vendor Specific |
-| `0x8C` | Vendor Specific |
-| `0x8D` | Vendor Specific |
-| `0x8E` | Vendor Specific |
-| `0x8F` | Vendor Specific |
+| `0x88` to `0x8F` | Vendor Specific |
 | `0x90` | EXECUTE DEVICE DIAGNOSTIC |
 | `0x91` | INITIALIZE DEVICE PARAMETERS |
 | `0x92` | DOWNLOAD MICROCODE |
@@ -220,27 +156,12 @@ The command register is used for the actual command opcode ranging from 0 to 0xF
 | `0x98` | CHECK POWER MODE |
 | `0x99` | SLEEP |
 | `0x9A` | Vendor Specific |
-| `0x9B` | |
-| `0x9C` | |
-| `0x9D` | |
-| `0x9E` | |
+| `0x9B` to `0x9E` | |
 | `0x9F` | ZAC Management Out |
 | `0xA0` | PACKET |
 | `0xA1` | IDENTIFY PACKET DEVICE |
 | `0xA2` | SERVICE |
-| `0xA3` | |
-| `0xA4` | |
-| `0xA5` | |
-| `0xA6` | |
-| `0xA7` | |
-| `0xA8` | |
-| `0xA9` | |
-| `0xAA` | |
-| `0xAB` | |
-| `0xAC` | |
-| `0xAD` | |
-| `0xAE` | |
-| `0xAF` | |
+| `0xA3` to `0xAF` | |
 | `0xB0` | SMART |
 | `0xB1` | Device Configuration Overlay |
 | `0xB2` | SET SECTOR CONFIGURATION EXT |
@@ -248,19 +169,10 @@ The command register is used for the actual command opcode ranging from 0 to 0xF
 | `0xB4` | Sanitize Device |
 | `0xB5` | |
 | `0xB6` | NV Cache |
-| `0xB7` | Reserved for CFA |
-| `0xB8` | Reserved for CFA |
-| `0xB9` | Reserved for CFA |
-| `0xBA` | Reserved for CFA |
-| `0xBB` | Reserved for CFA |
-| `0xBC` | |
-| `0xBD` | |
-| `0xBE` | |
-| `0xBF` | |
+| `0xB7` to `0xBB` | Reserved for CFA |
+| `0xBC` to `0xBF` | |
 | `0xC0` | CFA ERASE SECTORS |
-| `0xC1` | Vendor Specific |
-| `0xC2` | Vendor Specific |
-| `0xC3` | Vendor Specific |
+| `0xC1` to `0xC3` | Vendor Specific |
 | `0xC4` | READ MULTIPLE |
 | `0xC5` | WRITE MULTIPLE |
 | `0xC6` | SET MULTIPLE MODE |
@@ -272,17 +184,9 @@ The command register is used for the actual command opcode ranging from 0 to 0xF
 | `0xCC` | WRITE DMA QUEUED |
 | `0xCD` | CFA WRITE MULTIPLE WITHOUT ERASE |
 | `0xCE` | WRITE MULTIPLE FUA EXT |
-| `0xCF` | |
-| `0xD0` | |
+| `0xCF` to `0xD0` | |
 | `0xD1` | CHECK MEDIA CARD TYPE |
-| `0xD2` | |
-| `0xD3` | |
-| `0xD4` | |
-| `0xD5` | |
-| `0xD6` | |
-| `0xD7` | |
-| `0xD8` | |
-| `0xD9` | |
+| `0xD2` to `0xD9` | |
 | `0xDA` | GET MEDIA STATUS |
 | `0xDB` | ACKNOWLEDGE MEDIA CHANGE |
 | `0xDC` | BOOT - POST-BOOT |
@@ -315,12 +219,7 @@ The command register is used for the actual command opcode ranging from 0 to 0xF
 | `0xF7` | Vendor Specific |
 | `0xF8` | READ NATIVE MAX ADDRESS |
 | `0xF9` | SET MAX ADDRESS |
-| `0xFA` | Vendor Specific |
-| `0xFB` | Vendor Specific |
-| `0xFC` | Vendor Specific |
-| `0xFD` | Vendor Specific |
-| `0xFE` | Vendor Specific |
-| `0xFF` | Vendor Specific |
+| `0xFA` to `0xFF` | Vendor Specific |
 
 </details>
 
