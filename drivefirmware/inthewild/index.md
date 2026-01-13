@@ -140,9 +140,9 @@ Dumps an array of various data from the system area of the selected drive to a f
 
 Similar to [operation 0x55](#operation-0x55) above, parses a file of the same structure and writes it to the selected drive. However not a simple inverse of that operation, some file sections *Dump SA* can generate are rejected by this operation and cause it to fail, it also supports some additional section types *Dump SA* cannot produce.
 
-## Operation 0x57 - Get 0x5a5a
+## Operation 0x57 - Get 0x5A5A
 
-Just returns integer `0x5a5a`, unknown purpose.
+Just returns integer `0x5A5A`, unknown purpose.
 
 ## Operations 0x58 to 0x5B - Unknown
 
