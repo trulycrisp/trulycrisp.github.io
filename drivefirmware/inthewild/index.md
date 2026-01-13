@@ -58,9 +58,9 @@ The library has strings encrypted with a XOR-based cipher, and makes heavy use o
 2. Initialises callback function pointers from a structure provided as an argument, RC5-CFB decrypts a string table resource used internally by the library.
 3. Just returns 1.
 4. Initialises structure pointer passed as a parameter with the module version (3.0.1).
-5. Initialises structure pointer passed as a parameter with module ID (0x80ab).
+5. Initialises structure pointer passed as a parameter with module ID (`0x80AB`).
 
-The main dispatcher function returned by ordinal 1 handles operation codes ranging from 0x51 to 0x64 inclusive:
+The main dispatcher function returned by ordinal 1 handles operation codes ranging from `0x51` to `0x64` inclusive:
 
 ```
 unsigned int DispatchRequest(Request **request, size_t *request_size) {
@@ -114,7 +114,7 @@ unsigned int DispatchRequest(Request **request, size_t *request_size) {
 }
 ```
 
-Rather than being a simple installer that just autonomously performs all operations to infect a drive, this module is instead a handler for performing singular low-level operations on a drive one at a time, with much of the actual logic done remotely on the command-and-control side. A drive is first selected with opcode 0x5f, then opcodes 0x58-0x5e and 0x63 are used to perform various operations on that selected drive. Details of each operation are included below:
+Rather than being a simple installer that just autonomously performs all operations to infect a drive, this module is instead a handler for performing singular low-level operations on a drive one at a time, with much of the actual logic done remotely on the command-and-control side. A drive is first selected with opcode `0x5F`, then other opcodes are used to perform various operations on that selected drive. Details of each operation are included below:
 
 ## Operation 0x51 - Install driver
 
@@ -154,11 +154,11 @@ The module provides functionality to store arbitrary data in the system area of 
 
 ## Operation 0x5D - Covert Storage Read to File
 
-Related to [operation 0x5c](#operation-0x5c). This operation reads all data from the covert storage area of the selected drive, RC5 encrypts it, and writes it to a file.
+Related to [operation 0x5C](#operation-0x5c). This operation reads all data from the covert storage area of the selected drive, RC5 encrypts it, and writes it to a file.
 
 ## Operation 0x5E - Covert Storage Write
 
-Related to [operation 0x5c](#operation-0x5c) and [operation 0x5d](#operation-0x5d), writes provided data to covert storage in the system area of the selected drive.
+Related to [operation 0x5C](#operation-0x5c) and [operation 0x5D](#operation-0x5d), writes provided data to covert storage in the system area of the selected drive.
 
 ## Operation 0x5F - Select drive
 
@@ -344,35 +344,35 @@ It then reads a list of 29 different System Area modules with VUC action-code 8 
 
 ID    | Description
 ------|---------------------
-0x1   | Modules directory
-0x2   | Drive configuration
-0x11  | Firmware - ATA overlay
-0x12  | Firmware - CFG overlay
-0x13  | Firmware - LBA overlay 1
-0x14  | Firmware - Unknown overlay 1
-0x15  | Firmware - Techno overlay 1
-0x17  | Firmware - LLF overlay
-0x19  | Firmware - Unknown 1
-0x1B  | Firmware - Transient overlay
-0x1C  | Firmware - Techno overlay 2
-0x1E  | Firmware - Techno overlay 3
-0x1F  | Firmware - Unknown 2
-0x4C  | Firmware - LBA overlay 2
-0x61  | Firmware - DRVPROT overlay
-0x80  | Firmware - Unknown 3
-0x21  | SMART log current 1
-0x22  | SMART log current 2
-0x23  | SMART log clear
-0x24  | SMART log main
-0x2A  | Firmware - Unknown 4
-0x2F  | Firmware - Unknown overlay 2
-0x50  | Acoustic profile - main
-0x51  | Acoustic profile - alt 1
-0x52  | Acoustic profile - alt 2
-0x53  | Acoustic profile - alt 3
-0x6E  | Firmware - Unknown 5
-0x108 | Firmware - IBI overlay
-0x109 | ROM image
+`0x1`   | Modules directory
+`0x2`   | Drive configuration
+`0x11`  | Firmware - ATA overlay
+`0x12`  | Firmware - CFG overlay
+`0x13`  | Firmware - LBA overlay 1
+`0x14`  | Firmware - Unknown overlay 1
+`0x15`  | Firmware - Techno overlay 1
+`0x17`  | Firmware - LLF overlay
+`0x19`  | Firmware - Unknown 1
+`0x1B`  | Firmware - Transient overlay
+`0x1C`  | Firmware - Techno overlay 2
+`0x1E`  | Firmware - Techno overlay 3
+`0x1F`  | Firmware - Unknown 2
+`0x4C`  | Firmware - LBA overlay 2
+`0x61`  | Firmware - DRVPROT overlay
+`0x80`  | Firmware - Unknown 3
+`0x21`  | SMART log current 1
+`0x22`  | SMART log current 2
+`0x23`  | SMART log clear
+`0x24`  | SMART log main
+`0x2A`  | Firmware - Unknown 4
+`0x2F`  | Firmware - Unknown overlay 2
+`0x50`  | Acoustic profile - main
+`0x51`  | Acoustic profile - alt 1
+`0x52`  | Acoustic profile - alt 2
+`0x53`  | Acoustic profile - alt 3
+`0x6E`  | Firmware - Unknown 5
+`0x108` | Firmware - IBI overlay
+`0x109` | ROM image
 
 Many of these modules and their purposes are further documented in a manual for data recovery tool PC3000 [^7], and other lists available online [^8].
 
@@ -472,7 +472,7 @@ Related to [operation 0x59](#wd-royl---operation-0x59---unknown). Reads and vali
 
 ### WD ROYL - Operation 0x5B - Unknown
 
-The same as [operation 0x5a](#wd-royl---operation-0x5a---unknown), except it sets the byte at offset +10 to `0x00`.
+The same as [operation 0x5A](#wd-royl---operation-0x5a---unknown), except it sets the byte at offset +10 to `0x00`.
 
 ### WD ROYL - Operation 0x5C - Covert Storage Wipe
 
@@ -483,15 +483,15 @@ Reads and parses the firmware header from the drive, as detailed in [load SA rec
 
 ### WD ROYL - Operation 0x5D - Covert Storage Read to File
 
-Reads and parses the firmware header from the drive, as detailed in [load SA record type 2](#record-type-2---firmware-section-2). It then verifies the size of firmware section ID 257 is under 0x10000 sectors (33,554,432 bytes), and reads the section data. It then encrypts the data with RC5-CFB and writes it to a file.
+Reads and parses the firmware header from the drive, as detailed in [load SA record type 2](#record-type-2---firmware-section-2). It then verifies the size of firmware section ID 257 is under `0x10000` sectors (33,554,432 bytes), and reads the section data. It then encrypts the data with RC5-CFB and writes it to a file.
 
 ### WD ROYL - Operation 0x5E - Covert Storage Write
 
-This operation accepts input data, and first validates its size is under 0x10000 sectors (33,554,432 bytes). It reads and parses the firmware header from disk, as detailed in [load SA record type 2](#record-type-2---firmware-section-2). It checks if firmware section ID 257 exists in the header, removes it if found, and writes the header back to disk. It then reads the firmware header from disk again, and inserts a new section with ID 257 and the size of the input data. It then writes the input data to disk, and finally writes the new firmware header to disk.
+This operation accepts input data, and first validates its size is under `0x10000` sectors (33,554,432 bytes). It reads and parses the firmware header from disk, as detailed in [load SA record type 2](#record-type-2---firmware-section-2). It checks if firmware section ID 257 exists in the header, removes it if found, and writes the header back to disk. It then reads the firmware header from disk again, and inserts a new section with ID 257 and the size of the input data. It then writes the input data to disk, and finally writes the new firmware header to disk.
 
 ### WD ROYL - Operation 0x63 - Covert Storage Read
 
-The same as [operation 0x5d](#wd-royl---operation-0x5d---covert-storage-read-to-file), except does not encrypt the data or write it to a file, it simply returns the read data.
+The same as [operation 0x5D](#wd-royl---operation-0x5d---covert-storage-read-to-file), except does not encrypt the data or write it to a file, it simply returns the read data.
 
 ## Conclusion
 
