@@ -60,9 +60,6 @@ ATA is the command set of the SATA protocol, as used by most hard drives and man
 
 The command register is used for the actual command opcode ranging from 0 to 0xFF, while the other registers are parameter values with behaviors depending on the specific command.
 
-<details>
-<summary>ATA commands</summary>
-
 | Opcode | Name |
 |--------|------|
 | `0x00` | NOP |
@@ -321,8 +318,6 @@ The command register is used for the actual command opcode ranging from 0 to 0xF
 | `0xFD` | Vendor Specific |
 | `0xFE` | Vendor Specific |
 | `0xFF` | Vendor Specific |
-
-</details>
 
 ### NVM
 
