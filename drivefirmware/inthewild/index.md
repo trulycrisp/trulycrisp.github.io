@@ -4,13 +4,13 @@
 
 Storage drives are special as one of the few types of computer components with firmware-level attacks discovered in the wild, alongside UEFI/BIOS (LoJax et al) and BMC (iLOBleed). Something not merely theoretical or a conference talk demo, but actually used in the real world. Despite this there's been little public research on the topic compared to those others, with technical details of how that discovered attack actually worked remaining esoteric and public information being vague.
 
-This in-the-wild attack was, of course, published by Kaspersky in 2015 [^1]. Although the actual firmware implants were not documented, they detailed two separate versions of the installer used to remotely implant the firmware of a targeted drive. Beyond infecting firmware, these installers also had the ability to read and write arbitrary data to a drive's System Area (SA), as a form of covert storage. These installers were Windows dynamic libraries named nls_933w.dll, internal version number 3.0.1 with a PE timestamp of June 2010, and 4.2.0 with a timestamp of May 2013. Version 3.0.1 supports a range of hard drive vendors (Maxtor, Seagate, Western Digital, Samsung), while 4.2.0 supports additional hard drives (Hitachi, Toshiba) and also some SSDs (Micron, OCZ) [^2].
+This in-the-wild attack was, of course, published by Kaspersky in 2015[^1]. Although the actual firmware implants were not documented, they detailed two separate versions of the installer used to remotely implant the firmware of a targeted drive. Beyond infecting firmware, these installers also had the ability to read and write arbitrary data to a drive's System Area (SA), as a form of covert storage. These installers were Windows dynamic libraries named nls_933w.dll, internal version number 3.0.1 with a PE timestamp of June 2010, and 4.2.0 with a timestamp of May 2013. Version 3.0.1 supports a range of hard drive vendors (Maxtor, Seagate, Western Digital, Samsung), while 4.2.0 supports additional hard drives (Hitachi, Toshiba) and also some SSDs (Micron, OCZ)[^2].
 
-Of those versions detailed above, only the earlier version 3.0.1 has a sample publicly available [^3], so that version will be the subject of this analysis. The sample is a 32-bit DLL (nls_933w.dll) that also contains a kernel driver (win32m.sys) as a PE resource.
+Of those versions detailed above, only the earlier version 3.0.1 has a [sample publicly available](nls_933w.zip)[^3] (password: infected), so that version will be the subject of this analysis. The sample is a 32-bit DLL (nls_933w.dll) that also contains a kernel driver (win32m.sys) as a PE resource.
 
 ## Driver
 
-The kernel driver win32m.sys is fairly minimal, only providing low-level interfaces to send ATA commands to drives, and containing not much else. Interestingly the PE timestamp of the driver (23/8/2001 17:03:19 UTC) appears to be forged, as the rich header shows it was compiled with Visual Studio 7.0 Rainier (released February 13 2002). The use of a custom driver at all is also interesting, as Windows versions from NT4 supported standard interfaces to send ATA commands from user-mode, although such capabilities were not publicly documented until the release of Server 2003 [^4]. This driver is unsigned, as was standard for 32-bit Windows before Driver Signature Enforcement was introduced, and provides its functionality through the following six IOCTLs:
+The kernel driver win32m.sys is fairly minimal, only providing low-level interfaces to send ATA commands to drives, and containing not much else. Interestingly the PE timestamp of the driver (23/8/2001 17:03:19 UTC) appears to be forged, as the rich header shows it was compiled with Visual Studio 7.0 Rainier (released February 13 2002). The use of a custom driver at all is also interesting, as Windows versions from NT4 supported standard interfaces to send ATA commands from user-mode, although such capabilities were not publicly documented until the release of Server 2003[^4]. This driver is unsigned, as was standard for 32-bit Windows before Driver Signature Enforcement was introduced, and provides its functionality through the following six IOCTLs:
 
 ### IOCTL 0x870021C0 - Get Version
 
@@ -295,7 +295,7 @@ Features  | Sectors | LBA low | LBA mid | LBA high  | Device  | Command
 ----------|---------|---------|---------|-----------|---------|--------
 `0x45`    | `0xB`   | `0x0`   | `0x44`  | `0x57`    | `0xA0`  | `0x80`
 
-A 2006-dated manual for WD internal tool *TREX* [^5] refers to this command as *VSC enable*:
+A 2006-dated manual for WD internal tool *TREX*[^5] refers to this command as *VSC enable*:
 
 ![VSC enable description](wd_vsc_enable.png)
 
@@ -333,7 +333,7 @@ For dumping the system area ([operation 0x55](#operation-0x55---dump-sa-to-file)
 
 `24 00 01 00` `4-byte offset` `4-byte size` `01`
 
-Although not documented in the TREX manual, this action-code is detailed elsewhere on the internet [^6]. It loops with the offset starting at 0 and incrementing by 65,536 each read up to a maximum of 262,144. After the first read, if it detects any subsequent read returns the same data as the first read, it exits the loop early as a wraparound protection.
+Although not documented in the TREX manual, this action-code is detailed elsewhere on the internet[^6]. It loops with the offset starting at 0 and incrementing by 65,536 each read up to a maximum of 262,144. After the first read, if it detects any subsequent read returns the same data as the first read, it exits the loop early as a wraparound protection.
 
 It then reads a list of 29 different System Area modules with VUC action-code 8 function-code 1, using the following parameter data:
 
@@ -374,7 +374,7 @@ ID    | Description
 `0x108` | Firmware - IBI overlay
 `0x109` | ROM image
 
-Many of these modules and their purposes are further documented in a manual for data recovery tool PC3000 [^7], and other lists available online [^8].
+Many of these modules and their purposes are further documented in a manual for data recovery tool PC3000[^7], and other lists available online[^8].
 
 </details>
 
