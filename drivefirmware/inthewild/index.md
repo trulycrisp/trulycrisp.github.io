@@ -1,5 +1,7 @@
 # Drive Firmware Security - In the Wild
 
+*This page references many technical terms and concepts detailed in the [Overview](../overview) page, which should be read first.*
+
 ## Introduction
 
 Storage drives are special as one of the few types of computer components with firmware-level attacks discovered in the wild, alongside UEFI/BIOS (LoJax et al) and BMC (iLOBleed). Something not merely theoretical or a conference talk demo, but actually used in the real world. Despite this there's been little public research on the topic compared to those others, with technical details of how that discovered attack actually worked remaining esoteric and public information being vague.
