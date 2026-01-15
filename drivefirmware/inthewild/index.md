@@ -244,7 +244,7 @@ As shown in the above code, this module supports six different major types of dr
 
     **AND**
 
-* WD Vendor Unique Command *VSC Unlock* succeeds
+* WD Vendor Unique Command (VUC) *VSC Enable* succeeds
 
 ### WD (Type 2)
 
@@ -256,7 +256,7 @@ As shown in the above code, this module supports six different major types of dr
 
     **AND**
 
-* WD Vendor Unique Command *VSC Unlock* succeeds
+* WD Vendor Unique Command (VUC) *VSC Enable* succeeds
 
 ## Operation 0x60 - Deselect drive
 
