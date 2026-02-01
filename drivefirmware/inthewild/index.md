@@ -166,7 +166,7 @@ The key allocation IDs are `0x100` and `0x101`, the only allocations used to sto
 
 Allocation `0x101` appears closely tied to `0x2`, with many areas of the library allocating or accessing these together as part of a single high-level operation. Allocation `0x101` also appears closely related to some core functionality of the firmware implant, with drive-specific implementations of the [load SA](#operation-0x56---load-sa-from-file) operation likely used for implant installation having functionality specific to this allocation ID. As such the most likely hypothesis is this allocation is used to store the payload executed on the computer through MBR substitution.
 
-In contrast allocation `0x100` appears more related to some extra optional functionality. The only use of this allocation ID in the library is simply implementing raw reads and write operations for the contained data, with no inbuilt parsing or other handling logic like other allocation IDs have. The most likely intent of this allocation ID is an area of covert storage, where external arbitrary data can be written to the drive SA for later reading.
+In contrast allocation `0x100` appears more related to some extra optional functionality. The only use of this allocation ID in the library is simply implementing raw read and write operations for the contained data, with no inbuilt parsing or other handling logic like other allocation IDs have. The most likely intent of this allocation ID is an area of covert storage, where external arbitrary data can be written to the drive SA for later reading.
 
 ### Implant Data Storage - Access
 
@@ -548,9 +548,9 @@ For dumping the System Area (SA) ([operation 0x55](#operation-0x55---dump-sa-to-
 
 Although not documented in the TREX manual, this action-code is detailed elsewhere on the internet[^6]. It iterates reading the flash in 65,536-byte chunks, incrementing the offset by the chunk size with each read, up to a maximum total size of 262,144 bytes (4 chunks). After the first read, if it detects that any subsequent chunk has the same data as the first chunk, it exits the loop early as a wraparound protection.
 
-It then attempts to read a list of 29 different System Area (SA) modules from the drive. It first reads and parses module 1, the module directory, which details which modules are available, if a module is not in this directory it is skipped. The process used to read these modules is more complex than the standard *VSC set key* then *VSC data in/out* flow, with an extra step in-between.
+It then attempts to read a list of 29 different System Area (SA) modules from the drive. It first reads and parses module 1, the module directory, which details which modules are available, if a module is not in this directory it is skipped. The process used to read these modules is more complex than the standard *VSC send key* then *VSC data in/out* flow, with an extra step in-between.
 
-Firstly, the *VSC set key* VUC is executed for action-code 8 function-code 1 using the following parameter data:
+Firstly, the *VSC send key* VUC is executed for action-code 8 function-code 1 using the following parameter data:
 
 `08 00 01 00` `2-byte module ID`
 
@@ -618,7 +618,7 @@ Record type  | Description
 
 ### WD ROYL - Operation 0x56 - Load SA from File
 
-For loading data to the System Area (SA) ([operation 0x56](#operation-0x56---load-sa-from-file)), it decrypts and parses an input file of the same format detailed in [operation 0x55](#wd-royl---operation-0x55---dump-sa-to-file), however there are differences in the types of records it supports. If the file contains a record type 4 (flash image) the entire file is rejected and the load fails, this means the output produced by the SA dump operation is not actually compatible with this SA load operation, even though they use the same structure. This SA load feature is likely the functionality used to install a firmware implant in a drive.
+For loading data to the System Area (SA) ([operation 0x56](#operation-0x56---load-sa-from-file)), it decrypts and parses an input file of the same format detailed in [operation 0x55](#wd-royl---operation-0x55---dump-sa-to-file), however there are differences in the types of records it supports. If the file contains a record type 4 (flash image) the entire file is rejected and the load fails, this means the output produced by the SA dump operation is not actually compatible with this SA load operation, even though they use the same structure. This SA load operation is likely the functionality used to install a firmware implant in a drive.
 
 This SA load operation also supports additional record types the SA dump operation does not produce, all supported record types are listed below:
 
