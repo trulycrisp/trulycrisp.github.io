@@ -6,7 +6,7 @@
 
 Storage drives are notable as one of the few types of computer components for which firmware-level persistence attacks have been discovered in-the-wild, alongside UEFI/BIOS (LoJax et al) and BMCs (iLOBleed), something not merely theoretical or a conference talk demo, but actually used in the real world. Despite this, there has been little public research on the topic compared to those other targets, with technical details of how the discovered attack actually worked remaining obscure and public information largely vague.
 
-This in-the-wild attack was published by Kaspersky in 2015[^1], although the actual firmware implants were not documented, they detailed two separate versions of the installer used to remotely implant the firmware of a targeted drive. Beyond infecting the firmware, these installers also had the ability to read and write arbitrary data to a drive's System Area (SA), as a form of covert storage. These installers were Windows dynamic libraries named nls_933w.dll, internal version number *3.0.1* with a PE timestamp of June 2010, and *4.2.0* with a timestamp of May 2013. Version *3.0.1* supports a range of hard drive vendors (Maxtor, Seagate, Western Digital, Samsung), while *4.2.0* supports additional hard drives (Hitachi, Toshiba) and also some SSDs (Micron, OCZ)[^2].
+This in-the-wild attack was published by Kaspersky in 2015[^1], although the actual firmware implants were not documented, they detailed two separate versions of the installer used to remotely implant the firmware of a targeted drive. Beyond infecting the firmware, these installers also had the ability to read and write arbitrary data to a drive's System Area (SA), as a form of covert storage. These installers were Windows dynamic libraries named *nls_933w.dll*, internal version number *3.0.1* with a PE timestamp of June 2010, and *4.2.0* with a timestamp of May 2013. Version *3.0.1* supports a range of hard drive vendors (Maxtor, Seagate, Western Digital, Samsung), while *4.2.0* supports additional hard drives (Hitachi, Toshiba) and also some SSDs (Micron, OCZ)[^2].
 
 Of those versions detailed above, only the earlier version *3.0.1* has a [sample publicly available](nls_933w.zip)[^3] (password: infected), so that version will be the subject of this analysis. The sample is a 32-bit DLL (*nls_933w.dll*) that also contains a kernel driver (*win32m.sys*) as a PE resource.
 
@@ -192,7 +192,7 @@ Uninstalls driver service (win32m.sys).
 
 ## Operation 0x53 - Get Version
 
-Returns string *3.4.1*, possible internal version number, though different from the main library version of 3.0.1.
+Returns string *3.4.1*, likely an internal version number for something, though different from the main library version of *3.0.1*.
 
 ## Operation 0x54 - Enumerate Drives
 
@@ -279,10 +279,10 @@ class DriveManager {
     DriveManager() {
         handlers.push_back(new MaxtorHandler());
         handlers.push_back(new Seagate1Handler());
-        handlers.push_back(new WD2Handler());
+        handlers.push_back(new WDROYLHandler());
         handlers.push_back(new SamsungHandler());
         handlers.push_back(new WD1Handler());
-        handlers.push_back(new Seagate2Handler());
+        handlers.push_back(new SeagateF3Handler());
     }
 
     Drive* CreateDrive(DriveInfo* drive_info, DriveAddress* drive_address) {
@@ -303,7 +303,7 @@ class DriveManager {
 
 </details>
 
-As shown in the above code, this library supports six different major types of drives, though some of those perform additional checks internally to identify minor sub-types. The checks used to identify each drive type are detailed below:
+As shown in the above code, this library supports six different major types of drives, though some of those perform additional checks internally to identify minor sub-types. The checks used to identify each drive type are mostly based on the result of ATA command `0xEC` IDENTIFY DEVICE, and are detailed below:
 
 ### Maxtor
 
@@ -331,7 +331,7 @@ As shown in the above code, this library supports six different major types of d
 
     **AND**
 
-* Identify byte 275 (vendor-specific) is not *P* (`0x50`)
+* Identify device byte 275 (vendor-specific) is not *P* (`0x50`)
 
 ### Seagate F3
 
@@ -339,7 +339,7 @@ As shown in the above code, this library supports six different major types of d
 
     **AND**
 
-* Identify byte 275 (vendor-specific) is *P* (`0x50`)
+* Identify device byte 275 (vendor-specific) is *P* (`0x50`)
 
 ### WD (Type 1)
 
@@ -347,7 +347,7 @@ As shown in the above code, this library supports six different major types of d
 
     **AND**
 
-* Identify word 142 (vendor-specific) is 0, 1, or 2
+* Identify device word 142 (vendor-specific) is 0, 1, or 2
 
     **AND**
 
@@ -359,7 +359,7 @@ As shown in the above code, this library supports six different major types of d
 
     **AND**
 
-* Identify word 142 (vendor-specific) is 4
+* Identify device word 142 (vendor-specific) is 4
 
     **AND**
 
@@ -533,12 +533,12 @@ The incompatibility of the test drive with these checks is due to their actual p
 
 The exception vector table checks are verifying which of several possible firmware modifications the drive has, to identify where the CHS address should be located nearby. For the first possible option at offset `0x34` for example, the test drive has ARM NOP instruction `00 00 A0 E1` (`mov r0,r0`) at this position, seemingly for another unused exception vector. A packed CHS address value in an unused exception vector makes no sense for standard drive firmware; however, it makes perfect sense for a custom firmware implant, for which an unused vector is a convenient area of free space.
 
-Kaspersky identified this functionality in their report on this malware; however, they seemed to misinterpret it as part of the firmware flashing process, possibly finding NOP instructions to patch with hooks for firmware modifications[^2]:
+Kaspersky identified this functionality in their report on this malware; however, they seemed to misinterpret it as part of the firmware flashing process, possibly interpreting it as finding NOP instructions to patch with hooks for firmware modifications[^2]:
 
 >The main function to reflash the HDD firmware receives an external payload, which can be compressed by LZMA. ...  For WD drives, there is a sub-routine
 searching for ARM NOP opcodes in read data, and then used further in following writes.
 
-In fact the purpose of this functionality is something perhaps even more interesting. When performed, the firmware of the drive has already been infected with a custom implant, with the reads, checks, and CHS address extraction being a form of communication channel with that implant.
+In fact the purpose of this functionality is something perhaps even more interesting. When performed, the firmware of the drive is already infected with a custom implant, with the reads, checks, and CHS address extraction being a form of communication channel with that implant.
 
 ### WD ROYL - Operation 0x55 - Dump SA to File
 
