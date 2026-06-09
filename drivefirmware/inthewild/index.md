@@ -1,3 +1,6 @@
+---
+date: 2026-01-13
+---
 # Drive Firmware Security - In the Wild
 
 *This page references many technical terms and concepts detailed in the [Overview](../overview) page, which should be read first.*

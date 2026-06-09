@@ -1,3 +1,6 @@
+---
+date: 2026-06-08
+---
 # Drive Firmware Security - Phison S11
 
 *This page references many technical terms and concepts detailed in the [Overview](../overview) page, which should be read first.*
