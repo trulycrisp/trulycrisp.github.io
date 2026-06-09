@@ -14,6 +14,6 @@ layout: null
     <link href="{{ p.url | absolute_url }}" rel="alternate" type="text/html"/>
     <id>{{ p.url | absolute_url }}</id>
     <updated>{{ p.date | default: site.time | date_to_xmlschema }}</updated>
-    <content type="html" xml:base="{{ p.url | absolute_url }}">{{ p.content | xml_escape }}</content>
+    <content type="html">{{ p.content | strip_html | truncatewords: 60 | xml_escape }}</content>
   </entry>
 {% endfor %}</feed>
