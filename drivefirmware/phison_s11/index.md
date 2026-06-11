@@ -9,9 +9,9 @@ date: 2026-06-08
 
 ## Introduction
 
-The Phison S11/3111 is one of the most common controllers used in SATA SSDs, particularly for budget drives. Although not the only SATA SSD controller Phison currently produces[^1], it's by far the most popular due to its low cost, S11 controllers are more commonly found in drives today than all other Phison SATA controllers combined. Manufacturers like Phison let smaller companies create and sell a unique SSD product without having to develop an entire controller and firmware platform themselves, Phison will sell vendors a base hardware and firmware package they can customise for their specific needs. For Phison controllers such as the S11 a vendor can purchase anything from a complete off-the-shelf reference design with vendor branding to a co-developed custom design where the S11 controller is combined with a custom PCB, specific NAND flash chips, and customised firmware. Although each drive model with an S11 controller has variations in branding or customisation, the controller hardware and core firmware of these drives are always the same.
+The Phison S11/3111 is one of the most common controllers used in SATA SSDs today, particularly for budget drives, with one drive model using this controller selling over 100 million units[^1]. Although not the only SATA SSD controller Phison currently produces[^2] it's by far the most popular due to its low cost, S11 controllers are more commonly found in drives today than all other Phison SATA controllers combined. Manufacturers like Phison let smaller companies create and sell a unique SSD product without having to develop an entire controller and firmware platform themselves, Phison will sell vendors a base hardware and firmware package they can customise for their specific needs. For Phison controllers such as the S11 a vendor can purchase anything from a complete off-the-shelf reference design with vendor branding to a co-developed custom design where the S11 controller is combined with a custom PCB, specific NAND flash chips, and customised firmware. Although each drive model with an S11 controller has variations in branding or customisation, the controller hardware and core firmware of these drives are always the same.
 
-In the context of security this makes these drives a desirable target to attack, as a capability developed for this single controller can be used for many different drive models from many different vendors. The table below shows a sample of some drive models that use the S11 controller[^2]:
+In the context of security this makes these drives a desirable target to attack, as a capability developed for this single controller can be used for many different drive models from many different vendors. The table below shows a sample of some drive models that use the S11 controller[^3]:
 
 | Vendor | Model |
 |---|---|
@@ -378,5 +378,6 @@ Outside of the above detailed firmware signature's non-functional use of RSA and
 
 Code to demonstrate these vulnerabilities, including reading and writing firmware from a drive, packing and unpacking firmware files for modification, and various low-level access to drive internals through VUCs, can be found in the [Psychite](https://github.com/trulycrisp/psychite) repository.
 
-[^1]: https://www.phison.com/en/solutions/ssd
-[^2]: https://docs.google.com/spreadsheets/d/1B27_j9NDPU3cNlj2HKcrfpJKHkOf-Oi1DbuuQva2gT4
+[^1]: https://www.pcgamer.com/hardware/ssds/sata-drives-are-still-going-strong-as-kingston-announces-it-has-shipped-100-million-a400-ssds
+[^2]: https://www.phison.com/en/solutions/ssd
+[^3]: https://docs.google.com/spreadsheets/d/1B27_j9NDPU3cNlj2HKcrfpJKHkOf-Oi1DbuuQva2gT4
