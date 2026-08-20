@@ -1,6 +1,6 @@
 title: Truly Crisp
 remote_theme: "mmistakes/minimal-mistakes@4.28.1"
-minimal_mistakes_skin: catppuccin_mocha
+minimal_mistakes_skin: dark
 
 plugins:
 - jekyll-include-cache
