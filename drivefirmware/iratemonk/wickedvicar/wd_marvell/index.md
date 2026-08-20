@@ -1317,10 +1317,14 @@ In the tables below, *usable size* excludes areas made unaddressable by sector s
 *Sabre* is an early family using WD Marvell architecture, specifically the pre-ROYL variant. This drive family was produced from approximately 2004 to 2007, with the example here using an SA copy of a drive dated *19 February 2006*.
 
 <table>
-<tr valign="top">
-<td markdown="1">
+<tr>
+<td>
 
-![WD800BB-00JHC0 drive](sabre/image.jpg)
+<figure>
+  <a href="sabre/image.jpg" class="image-popup">
+    <img src="sabre/image.jpg" alt="WD800BB-00JHC0 drive">
+  </a>
+</figure>
 
 </td><td markdown="1">
 
@@ -1358,7 +1362,7 @@ Name | Value
 </table>
 
 <table>
-<tr valign="top">
+<tr>
 <td markdown="1">
 
 ![SA storage extents](sabre/storage_extents.svg)
@@ -1384,7 +1388,7 @@ Conflict (unusable) | *N/A*
 *Yosemite* is an early family using the ROYL-ABA architecture variant, produced from approximately 2007 to 2009. The example here uses a physical drive, shown in the included image.
 
 <table>
-<tr valign="top">
+<tr>
 <td markdown="1">
 
 ![WD2500AAKS-00VSA0 drive](yosemite/image.jpg)
@@ -1425,7 +1429,7 @@ Name | Value
 </table>
 
 <table>
-<tr valign="top">
+<tr>
 <td markdown="1">
 
 ![SA storage extents](yosemite/storage_extents.svg)
@@ -1451,7 +1455,7 @@ Conflict (unusable) | *N/A*
 *Saturn* is a family using the ROYL-ABA architecture variant, commonly found as *Scorpio*-branded 2.5" laptop drives and produced from approximately 2008 to 2012. The example here uses a physical drive dated *13 April 2010*, shown in the included image.
 
 <table>
-<tr valign="top">
+<tr>
 <td markdown="1">
 
 ![WD3200BEKT-60V5T1 drive](saturn/image.jpg)
@@ -1492,7 +1496,7 @@ Name | Value
 </table>
 
 <table>
-<tr valign="top">
+<tr>
 <td markdown="1">
 
 ![SA storage extents](saturn/storage_extents.svg)
@@ -1522,7 +1526,7 @@ This drive is included purely as a hypothetical demonstration of what the result
 Because it has SA defect list entries, this drive also demonstrates the danger of the broken [SA defect compensation](#sa-defects) *WICKEDVICAR* implements: a substantial portion of the storage extents here overlap either in-use SA modules or unusable areas that are unaddressable due to [sector slipping](https://en.wikipedia.org/wiki/Sector_slipping). Writing an SA storage allocation to one of those conflicting areas could break the drive.
 
 <table>
-<tr valign="top">
+<tr>
 <td markdown="1">
 
 ![WD84PURZ-85B2YY0 drive](avalon_c5/image.jpg)
@@ -1563,7 +1567,7 @@ Name | Value
 </table>
 
 <table>
-<tr valign="top">
+<tr>
 <td markdown="1">
 
 ![SA storage extents](avalon_c5/storage_extents.svg)

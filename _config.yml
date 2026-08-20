@@ -13,7 +13,6 @@ defaults:
       layout: single
       author_profile: false
       toc: true
-      toc_sticky: true
       sidebar:
         nav: main
   - scope:
