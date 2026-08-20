@@ -7,7 +7,11 @@ date: 2026-08-20
 
 *WICKEDVICAR* is the cover name of a component for remote installation and management of an *IRATEMONK* firmware implant from a Windows host operating system (OS). Although, as detailed in [IRATEMONK](../iratemonk), other OSs are supported by the firmware implant itself, only Windows is known to have a component for installing and managing the implant remotely. The earliest source implying the existence of *WICKEDVICAR* is a page from the [ANT catalogue](https://en.wikipedia.org/wiki/ANT_catalog), dated 20 June 2008[^ant_catalogue_iratemonk]:
 
-![ANT catalogue page](../ant_catalogue.jpg)
+<figure>
+    <a href="../ant_catalogue.jpg" class="image-popup">
+        <img src="../ant_catalogue.jpg" alt="ANT catalogue page">
+    </a>
+</figure>
 
 Although the name *WICKEDVICAR* is not used here (only its driver [SLICKERVICAR](../slickervicar)), details relevant to it are included. It's described as a module for *UNITEDRAKE* (a.k.a. *EquationDrug* and *GrayFish*[^vb_unitedrake]) and *STRAITBIZARRE* (a.k.a. *SBZ*[^kaspersky_sbz], misspelled on the page as *STRAITBAZZARE*). Its stated purpose is to *upload the hard drive firmware onto the target machine to implant IRATEMONK and its payload*.
 

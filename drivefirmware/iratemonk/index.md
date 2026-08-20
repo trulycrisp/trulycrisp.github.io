@@ -9,7 +9,11 @@ date: 2026-08-20
 
 A page from the infamous [ANT catalogue](https://en.wikipedia.org/wiki/ANT_catalog), dated 20 June 2008, gives an overview of its features and capabilities at that time[^ant_catalogue_iratemonk]:
 
-![ANT catalogue page](ant_catalogue.jpg)
+<figure>
+    <a href="ant_catalogue.jpg" class="image-popup">
+        <img src="ant_catalogue.jpg" alt="ANT catalogue page">
+    </a>
+</figure>
 
 The above page describes its general purpose: designed for personal computers, it persists a malware payload that executes in the operating system every time the system powers on, and it supports a variety of hard drive vendors (Western Digital, Seagate, Maxtor, Samsung). It's described as configurable, optionally able to execute the payload on a custom interval rather than on every boot.
 

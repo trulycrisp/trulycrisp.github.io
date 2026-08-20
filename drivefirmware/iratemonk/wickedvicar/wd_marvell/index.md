@@ -33,7 +33,11 @@ The firmware designates a certain number of cylinders on all heads as reserved f
 
 This is detailed further in a manual for the data recovery tool PC3000[^pc3000_manual]:
 
-![System and user area cylinder layout](pc3000_manual_sa_cylinders.png)
+<figure>
+    <a href="pc3000_manual_sa_cylinders.png" class="image-popup">
+        <img src="pc3000_manual_sa_cylinders.png" alt="System and user area cylinder layout">
+    </a>
+</figure>
 
 >Service area in MWD-CHS and MWD-ROYL-CHS drive families consists of tracks that are assigned negative numbers. They are marked in the range from -1 to -32 in the figure to the left. Only first -20 tracks are used out of that range, others are not formatted. Service area has two identical copies recorded for logical heads 0 and 1.
 
@@ -1321,9 +1325,9 @@ In the tables below, *usable size* excludes areas made unaddressable by sector s
 <td>
 
 <figure>
-  <a href="sabre/image.jpg" class="image-popup">
-    <img src="sabre/image.jpg" alt="WD800BB-00JHC0 drive">
-  </a>
+    <a href="sabre/image.jpg" class="image-popup">
+        <img src="sabre/image.jpg" alt="WD800BB-00JHC0 drive">
+    </a>
 </figure>
 
 </td><td markdown="1">
@@ -1334,6 +1338,7 @@ In the tables below, *usable size* excludes areas made unaddressable by sector s
 ---|---
  Model | *WDC WD800BB-00JHC0*
  Serial | *WD-WMAM9DPF8296*
+ Firmware | *05.01C05*
  Capacity | 80 GB
  Date | 19 February 2006
  Family | *Sabre*
@@ -1363,9 +1368,13 @@ Name | Value
 
 <table>
 <tr>
-<td markdown="1">
+<td>
 
-![SA storage extents](sabre/storage_extents.svg)
+<figure>
+    <a href="sabre/storage_extents.svg" class="image-popup">
+        <img src="sabre/storage_extents.svg" alt="SA storage extents">
+    </a>
+</figure>
 
 </td><td markdown="1">
 
@@ -1389,9 +1398,13 @@ Conflict (unusable) | *N/A*
 
 <table>
 <tr>
-<td markdown="1">
+<td>
 
-![WD2500AAKS-00VSA0 drive](yosemite/image.jpg)
+<figure>
+    <a href="yosemite/image.jpg" class="image-popup">
+        <img src="yosemite/image.jpg" alt="WD2500AAKS-00VSA0 drive">
+    </a>
+</figure>
 
 </td><td markdown="1">
 
@@ -1401,6 +1414,7 @@ Conflict (unusable) | *N/A*
 ---|---
  Model | *WDC WD2500AAKS-00VSA0*
  Serial | *WD-WMART0842207*
+ Firmware | *01.01B01*
  Capacity | 250 GB
  Date | 4 March 2008
  Family | *Yosemite*
@@ -1430,9 +1444,13 @@ Name | Value
 
 <table>
 <tr>
-<td markdown="1">
+<td>
 
-![SA storage extents](yosemite/storage_extents.svg)
+<figure>
+    <a href="yosemite/storage_extents.svg" class="image-popup">
+        <img src="yosemite/storage_extents.svg" alt="SA storage extents">
+    </a>
+</figure>
 
 </td><td markdown="1">
 
@@ -1456,9 +1474,13 @@ Conflict (unusable) | *N/A*
 
 <table>
 <tr>
-<td markdown="1">
+<td>
 
-![WD3200BEKT-60V5T1 drive](saturn/image.jpg)
+<figure>
+    <a href="saturn/image.jpg" class="image-popup">
+        <img src="saturn/image.jpg" alt="WD3200BEKT-60V5T1 drive">
+    </a>
+</figure>
 
 </td><td markdown="1">
 
@@ -1468,6 +1490,7 @@ Conflict (unusable) | *N/A*
 ---|---
  Model | *WDC WD3200BEKT-60V5T1*
  Serial | *WD-WXH1A30U1898*
+ Firmware | *12.01A12*
  Capacity | 320 GB
  Date | 13 April 2010
  Family | *Saturn*
@@ -1497,9 +1520,13 @@ Name | Value
 
 <table>
 <tr>
-<td markdown="1">
+<td>
 
-![SA storage extents](saturn/storage_extents.svg)
+<figure>
+    <a href="saturn/storage_extents.svg" class="image-popup">
+        <img src="saturn/storage_extents.svg" alt="SA storage extents">
+    </a>
+</figure>
 
 </td><td markdown="1">
 
@@ -1527,9 +1554,13 @@ Because it has SA defect list entries, this drive also demonstrates the danger o
 
 <table>
 <tr>
-<td markdown="1">
+<td>
 
-![WD84PURZ-85B2YY0 drive](avalon_c5/image.jpg)
+<figure>
+    <a href="avalon_c5/image.jpg" class="image-popup">
+        <img src="avalon_c5/image.jpg" alt="WD84PURZ-85B2YY0 drive">
+    </a>
+</figure>
 
 </td><td markdown="1">
 
@@ -1539,6 +1570,7 @@ Because it has SA defect list entries, this drive also demonstrates the danger o
 ---|---
  Model | *WDC WD84PURZ-85B2YY0*
  Serial | *WD-CA1LE4UK*
+ Firmware | *80.00A80*
  Capacity | 8 TB
  Date | 20 July 2022
  Family | *Avalon C5*
@@ -1568,9 +1600,13 @@ Name | Value
 
 <table>
 <tr>
-<td markdown="1">
+<td>
 
-![SA storage extents](avalon_c5/storage_extents.svg)
+<figure>
+    <a href="avalon_c5/storage_extents.svg" class="image-popup">
+        <img src="avalon_c5/storage_extents.svg" alt="SA storage extents">
+    </a>
+</figure>
 
 </td><td markdown="1">
 
