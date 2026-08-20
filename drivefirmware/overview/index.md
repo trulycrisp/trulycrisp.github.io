@@ -77,7 +77,7 @@ Command      | 8           | 8
 
 The command register is used for the actual command opcode, ranging from `0x00` to `0xFF`, while the other registers are parameter values with behaviours depending on the specific command.
 
-<details>
+<details markdown="1">
 <summary>ATA commands</summary>
 
 Opcode | Name
@@ -179,7 +179,7 @@ NVM commands are separated into two main types: I/O commands and Admin commands.
 | `0x80-0xBF` | I/O Command Set Specific |
 | `0xC0-0xFF` | Vendor Specific |
 
-<details>
+<details markdown="1">
 <summary>NVM Admin commands</summary>
 
 | Opcode | Command Name |

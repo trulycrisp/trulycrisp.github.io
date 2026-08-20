@@ -62,7 +62,7 @@ The pre-ROYL variant structures the SA very similarly to the WDC MCU architectur
 
 In the pre-ROYL variant, files begin with a 24-byte header, called *file header 1* or *old file header* in WD internal terminology. This header has the following format defined in [TREX](#trex) script *eng.trx*:
 
-<details>
+<details markdown="1">
 <summary>Pre-ROYL file header format</summary>
 
 ```
@@ -103,7 +103,7 @@ Offset | Size | Type | Value | Description
 
 The same TREX script also gives the format of the SA directory:
 
-<details>
+<details markdown="1">
 <summary>Pre-ROYL directory format</summary>
 
 ```
@@ -165,7 +165,7 @@ Offset | Size | Type | Description
 
 In ROYL architecture (both CHS and ABA variants), files begin with a 28-byte header, called *file header 2* or *new file header* in WD internal terminology. This header has the following format defined in [TREX](#trex) script *eng.trx*:
 
-<details>
+<details markdown="1">
 <summary>ROYL file header format</summary>
 
 ```
@@ -219,7 +219,7 @@ The general SA design of ROYL-CHS is largely similar to [pre-ROYL](#system-area-
 
 The format of the ROYL-CHS directory is included in [TREX](#trex) script *eng.trx*:
 
-<details>
+<details markdown="1">
 <summary>ROYL-CHS directory format</summary>
 
 ```
@@ -272,7 +272,7 @@ This results in an SA structure functionally similar to that of the earlier arch
 
 The format of the ROYL-ABA directory is included in [TREX](#trex) script *eng.trx*:
 
-<details>
+<details markdown="1">
 <summary>ROYL-ABA directory format</summary>
 
 ```
@@ -401,7 +401,7 @@ SA files can be read or written through VUC action-code 8 (*file*), with functio
 
 These read and write operations both have implementations in TREX script *eng.trx*:
 
-<details>
+<details markdown="1">
 <summary>VUC read and write file implementations</summary>
 
 ```
@@ -494,7 +494,7 @@ The drive can convert a given CHS address to the corresponding block address usi
 
 This *reverse translate* VUC has the following implementation in TREX script *eng.trx*:
 
-<details>
+<details markdown="1">
 <summary>VUC reverse translate implementation</summary>
 
 ```
@@ -765,7 +765,7 @@ The [TREX](#trex) manual describes this action-code as getting a *table*:
 
 The specific table retrieved, ID 1, is named either *physical parameters* or simply *data table* throughout TREX. The TREX script *eng.trx* details the extensive structure of this table:
 
-<details>
+<details markdown="1">
 <summary>Physical parameters table structure</summary>
 
 ```
@@ -902,7 +902,7 @@ These CHS values are then used with VUC action-code 12 (*CHS*) function-code 1 (
 
 This VUC also has an implementation in TREX script *eng.trx*:
 
-<details>
+<details markdown="1">
 <summary>VUC read CHS implementation</summary>
 
 ```
@@ -1015,7 +1015,7 @@ Interestingly, when recalculating the file header checksum of an updated directo
 
 If the SA directory was modified as detailed above, it then reloads it within the drive firmware using VUC action-code 8 (*file*) function-code 3 (*download static*) with no data transfer. This is described in [TREX](#trex) script *eng.trx* as *Download from media to static file*:
 
-<details>
+<details markdown="1">
 <summary>VUC download static file description</summary>
 
 ```
@@ -1124,7 +1124,7 @@ ID | Description
 
 It first reads the contents of the drive's flash ROM using VUC action-code 36 (*flash*) function-code 1 (*read*), described in [TREX](#trex) script *eng.trx* as *Read Flash* with the following implementation:
 
-<details>
+<details markdown="1">
 <summary>VUC read flash implementation</summary>
 
 ```
@@ -1237,7 +1237,7 @@ It retrieves the above CHS address from the firmware implant by reading the ARM 
 
 This memory read uses VUC action-code 19 (*memory*) function-code 1 (*read*). The [TREX](#trex) script *eng.trx* describes it as *Read Memory Address* and has the following implementation:
 
-<details>
+<details markdown="1">
 <summary>VUC read memory implementation</summary>
 
 ```

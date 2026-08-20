@@ -27,7 +27,7 @@ The NOR flash that stored a computer BIOS was generally around 1 to 8 megabytes 
 
 This storage limitation is demonstrated by other firmware capabilities developed by the same organisation, such as *SWAP*, which targets a personal computer's BIOS[^ant_catalogue_swap]:
 
-<details>
+<details markdown="1">
 <summary>ANT catalogue SWAP page</summary>
 
 ![ANT catalogue SWAP page](ant_catalogue_swap.jpg)
