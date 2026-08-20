@@ -1,0 +1,8 @@
+---
+---
+
+$max-width: 1600px;
+$doc-font-size: 14px;
+
+@import "minimal-mistakes/skins/{{ site.minimal_mistakes_skin | default: 'default' }}";
+@import "minimal-mistakes";
