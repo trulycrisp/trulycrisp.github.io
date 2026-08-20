@@ -7,7 +7,11 @@ date: 2026-08-20
 
 *SLICKERVICAR* is the cover name for a Windows kernel driver used by [WICKEDVICAR](../wickedvicar) to execute ATA commands on a target drive. The earliest source referencing it is an [ANT catalogue page](../ant_catalogue.jpg)[^ant_catalogue_iratemonk], dated 20 June 2008:
 
-![ANT catalogue page](../ant_catalogue.jpg)
+<figure>
+    <a href="../ant_catalogue.jpg" class="image-popup">
+        <img src="../ant_catalogue.jpg" alt="ANT catalogue page">
+    </a>
+</figure>
 
 There *SLICKERVICAR* is named as a component related to *IRATEMONK*, and is used by *UNITEDRAKE* (a.k.a. *EquationDrug* and *GrayFish*[^vb_unitedrake]) and *STRAITBIZARRE* (a.k.a. *SBZ*[^kaspersky_sbz], misspelled in the page as *STRAITBAZZARE*) to *upload the hard drive firmware onto the target machine to implant IRATEMONK and its payload*.
 
