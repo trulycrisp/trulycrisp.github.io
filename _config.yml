@@ -14,8 +14,4 @@ defaults:
       author_profile: false
       toc: true
       toc_sticky: true
-  - scope:
-      path: drivefirmware
-    values:
-      sidebar:
-        nav: drivefirmware
+      enable_copy_code_button: true
