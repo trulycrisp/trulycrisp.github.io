@@ -1,3 +1,25 @@
 main:
-  - title: "Drive Firmware Security"
-    url: /drivefirmware
+  - title: Drive Firmware Security
+    url: /drivefirmware/
+
+drivefirmware:
+  - title: Drive Firmware Security
+    children:
+      - title: Introduction
+        url: /drivefirmware/
+      - title: Overview
+        url: /drivefirmware/overview/
+      - title: Phison S11
+        url: /drivefirmware/phison_s11/
+  - title: IRATEMONK
+    children:
+      - title: Introduction
+        url: /drivefirmware/iratemonk/
+      - title: IRATEMONK
+        url: /drivefirmware/iratemonk/iratemonk/
+      - title: SLICKERVICAR
+        url: /drivefirmware/iratemonk/slickervicar/
+      - title: WICKEDVICAR
+        url: /drivefirmware/iratemonk/wickedvicar/
+      - title: Western Digital (Marvell)
+        url: /drivefirmware/iratemonk/wickedvicar/wd_marvell/
