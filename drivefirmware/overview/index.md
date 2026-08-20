@@ -55,37 +55,37 @@ When a drive is attached to a computer, the computer communicates with it throug
 
 ATA is the command set of the SATA protocol, as used by most hard drives and many solid-state drives. The modern ATA command set defines commands using a set of *fields*, also known as *registers*, with some having variable size depending on whether the command uses 28-bit or 48-bit addressing:
 
-Name    | Bits LBA-28 | Bits LBA-48
---------|-------------|------------
-Feature | 8           | 16
-Count   | 8           | 16
-LBA     | 28          | 48
-Device  | 8           | 8
-Command | 8           | 8
+Name | Bits LBA-28 | Bits LBA-48
+---|---|---
+Feature | 8 | 16
+Count | 8 | 16
+LBA | 28 | 48
+Device | 8 | 8
+Command | 8 | 8
 
 Older ATA command set specifications used a different variation of fields, with some differences such as the LBA field being split. This variation is still often found today, especially in older resources:
 
-Name         | Bits LBA-28 | Bits LBA-48
--------------|-------------|------------
-Features     | 8           | 16
-Sector Count | 8           | 16
-LBA Low      | 8           | 16
-LBA Mid      | 8           | 16
-LBA High     | 8           | 16
-Device       | 8           | 8
-Command      | 8           | 8
+Name | Bits LBA-28 | Bits LBA-48
+---|---|---
+Features | 8 | 16
+Sector Count | 8 | 16
+LBA Low | 8 | 16
+LBA Mid | 8 | 16
+LBA High | 8 | 16
+Device | 8 | 8
+Command | 8 | 8
 
-The command register is used for the actual command opcode, ranging from `0x00` to `0xFF`, while the other registers are parameter values with behaviours depending on the specific command.
+The command register is used for the actual command opcode, ranging from `0x0` to `0xFF`, while the other registers are parameter values with behaviours depending on the specific command.
 
 <details markdown="1">
 <summary>ATA commands</summary>
 
 Opcode | Name
 -------|-----
-`0x00` | NOP
-`0x06` | DATA SET MANAGEMENT
-`0x07` | DATA SET MANAGEMENT XL
-`0x0B` | REQUEST SENSE DATA EXT
+`0x0` | NOP
+`0x6` | DATA SET MANAGEMENT
+`0x7` | DATA SET MANAGEMENT XL
+`0xB` | REQUEST SENSE DATA EXT
 `0x12` | GET PHYSICAL ELEMENT STATUS
 `0x20` | READ SECTOR(S)
 `0x24` | READ SECTOR(S) EXT
@@ -150,71 +150,72 @@ Opcode | Name
 `0xF4` | SECURITY ERASE UNIT
 `0xF5` | SECURITY FREEZE LOCK
 `0xF6` | SECURITY DISABLE PASSWORD
+
 </details>
 
 ## Command Sets - NVM
 
 NVM is the primary command set for the NVMe protocol, as used by most modern SSDs. Commands are 64 bytes in size. Although the exact fields within those 64 bytes vary based on the command, there is a Common Command Format defining a general format applicable to all:
 
-| Bytes | Field | Description |
-|-------|-------|-------------|
-| 00-03 | CDW0 | Command Dword 0 (Opcode, FUSE, PSDT, CID) |
-| 04-07 | NSID | Namespace Identifier |
-| 08-11 | CDW2 | Command-specific |
-| 12-15 | CDW3 | Command-specific |
-| 16-23 | MPTR | Metadata Pointer |
-| 24-39 | DPTR | Data Pointer |
-| 40-43 | CDW10 | Command-specific |
-| 44-47 | CDW11 | Command-specific |
-| 48-51 | CDW12 | Command-specific |
-| 52-55 | CDW13 | Command-specific |
-| 56-59 | CDW14 | Command-specific |
-| 60-63 | CDW15 | Command-specific |
+Bytes | Field | Description
+---|---|---
+0-3 | CDW0 | Command Dword 0 (Opcode, FUSE, PSDT, CID)
+4-7 | NSID | Namespace Identifier
+8-11 | CDW2 | Command-specific
+12-15 | CDW3 | Command-specific
+16-23 | MPTR | Metadata Pointer
+24-39 | DPTR | Data Pointer
+40-43 | CDW10 | Command-specific
+44-47 | CDW11 | Command-specific
+48-51 | CDW12 | Command-specific
+52-55 | CDW13 | Command-specific
+56-59 | CDW14 | Command-specific
+60-63 | CDW15 | Command-specific
 
 NVM commands are separated into two main types: I/O commands and Admin commands. I/O commands are what you would expect from the name, handling regular data reading and writing. Admin commands are the more interesting type for this topic's security focus, as they handle management of the drive itself, including drive configuration, firmware, and various other internal functionality. NVM Admin command opcodes are organised into three distinct ranges, each serving a specific purpose:
 
-| Range | Purpose |
-|-------|---------|
-| `0x00-0x7F` | Standard |
-| `0x80-0xBF` | I/O Command Set Specific |
-| `0xC0-0xFF` | Vendor Specific |
+Range | Purpose
+---|---
+`0x00-0x7F` | Standard
+`0x80-0xBF` | I/O Command Set Specific
+`0xC0-0xFF` | Vendor Specific
 
 <details markdown="1">
 <summary>NVM Admin commands</summary>
 
-| Opcode | Command Name |
-|--------|--------------|
-| `0x00` | Delete I/O Submission Queue |
-| `0x01` | Create I/O Submission Queue |
-| `0x02` | Get Log Page |
-| `0x04` | Delete I/O Completion Queue |
-| `0x05` | Create I/O Completion Queue |
-| `0x06` | Identify |
-| `0x08` | Abort |
-| `0x09` | Set Features |
-| `0x0A` | Get Features |
-| `0x0C` | Asynchronous Event Request |
-| `0x0D` | Namespace Management |
-| `0x10` | Firmware Commit |
-| `0x11` | Firmware Image Download |
-| `0x14` | Device Self-Test |
-| `0x15` | Namespace Attachment |
-| `0x18` | Keep Alive |
-| `0x19` | Directive Send |
-| `0x1A` | Directive Receive |
-| `0x1C` | Virtualization Management |
-| `0x1D` | NVMe-MI Send |
-| `0x1E` | NVMe-MI Receive |
-| `0x20` | Capacity Management |
-| `0x24` | Lockdown |
-| `0x7C` | Doorbell Buffer Config |
-| `0x7F` | Fabrics Commands |
-| `0x80` | Format NVM |
-| `0x81` | Security Send |
-| `0x82` | Security Receive |
-| `0x84` | Sanitize |
-| `0x86` | Get LBA Status |
-| `0xC0-0xFF` | Vendor Specific |
+Opcode | Command Name
+---|---
+`0x0` | Delete I/O Submission Queue
+`0x1` | Create I/O Submission Queue
+`0x2` | Get Log Page
+`0x4` | Delete I/O Completion Queue
+`0x5` | Create I/O Completion Queue
+`0x6` | Identify
+`0x8` | Abort
+`0x9` | Set Features
+`0xA` | Get Features
+`0xC` | Asynchronous Event Request
+`0xD` | Namespace Management
+`0x10` | Firmware Commit
+`0x11` | Firmware Image Download
+`0x14` | Device Self-Test
+`0x15` | Namespace Attachment
+`0x18` | Keep Alive
+`0x19` | Directive Send
+`0x1A` | Directive Receive
+`0x1C` | Virtualization Management
+`0x1D` | NVMe-MI Send
+`0x1E` | NVMe-MI Receive
+`0x20` | Capacity Management
+`0x24` | Lockdown
+`0x7C` | Doorbell Buffer Config
+`0x7F` | Fabrics Commands
+`0x80` | Format NVM
+`0x81` | Security Send
+`0x82` | Security Receive
+`0x84` | Sanitize
+`0x86` | Get LBA Status
+`0xC0-0xFF` | Vendor Specific
 
 </details>
 
