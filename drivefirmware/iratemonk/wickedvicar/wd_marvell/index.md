@@ -27,7 +27,7 @@ A 2006-dated [manual](trex_manual.pdf) for TREX and a 2008-dated [copy](trex.zip
 
 # System Area
 
-In WD Marvell architecture, positive cylinders are used to address the user area, while negative cylinders address the System Area used for internal firmware resources. A negative cylinder number may be counterintuitive, but the CHS coordinates used are not actually physical positions on the platters. They're a form of *virtual* CHS that goes through a layer of translation similar to a Logical Block Address (LBA).
+In WD Marvell architecture, positive cylinders are used to address the User Area, while negative cylinders address the System Area used for internal firmware resources. A negative cylinder number may be counterintuitive, but the CHS coordinates used are not actually physical positions on the platters. They're a form of *virtual* CHS that goes through a layer of translation similar to a Logical Block Address (LBA).
 
 The firmware designates a certain number of cylinders on all heads as reserved for the SA. Despite these cylinders being reserved on all heads, only the first two heads are actually used, each storing a redundant SA copy. If the drive has only a single head, both copies are stored in different areas within that same head.
 
@@ -35,7 +35,7 @@ This is detailed further in a manual for the data recovery tool PC3000[^pc3000_m
 
 <figure>
     <a href="pc3000_manual_sa_cylinders.png" class="image-popup">
-        <img src="pc3000_manual_sa_cylinders.png" alt="System and user area cylinder layout">
+        <img src="pc3000_manual_sa_cylinders.png" alt="System and User Area cylinder layout">
     </a>
 </figure>
 
@@ -490,6 +490,8 @@ Offset | Size | Type | Description
 
 As the above TREX script shows, the file ID parameter appears to always take up 16 bits, even for pre-ROYL drives, where file IDs are only 8-bit.
 
+For reading the file size is determined by executing the read VUC with no data transfer, and than retreiving the resulting *LBA* ATA register. The high 16-bits of that 24-bit register is the total file size in 512-byte sectors.
+
 ## VUCs - Reverse Translate
 
 The drive can convert a given CHS address to the corresponding block address using VUC action-code 22 (*RevXlate* or *reverse translate*) with no function-code, described in the [TREX](#trex) manual as *return the logical LBA from the current physical CHS*:
@@ -623,7 +625,7 @@ Offset | Size | Type | Value | Description
 
 Offset | Size | Type | Value | Description
 ---|---|---|---|---
- `0x0` | 2 | `uint16_t` | 2 (system area) | Address space
+ `0x0` | 2 | `uint16_t` | 2 (SA) | Address space
  `0x2` | 6 | unsigned 48-bit integer | | Region-relative block address, ABA or RLBA depending on the *defect management* parameter
  `0xA` | 2 | `uint16_t` | | Region number, zero-indexed
  `0xC` | 6 | unsigned 48-bit integer | | Absolute block address, ABA or RLBA depending on the *defect management* parameter
@@ -749,7 +751,7 @@ The WD Marvell [drive type class](../#drive-types---drive-type-class) implements
 * Identify device word 142 (*vendor specific*) is 4
 * [Enabling VUCs](#vucs---enabling) succeeds
 
-The identify device word 142 check is interesting. This field is unused and unmentioned in [TREX](#trex), and seemingly everywhere online. However, from testing, this value is always *4* for WD Marvell architecture drives and only those drives, including the latest drives from long after this version of *WICKEDVICAR*. Older WDC MCU architecture drives instead use values *1*, *2*, or *3* in this field. The value of identify device word 142 seems to be reliably usable as a marker for what firmware architecture type the drive has.
+The identify device word 142 check is interesting. This field is unused and unmentioned in [TREX](#trex), and seemingly everywhere online. However, from testing, this value is always *4* for WD Marvell architecture drives and only those drives, including the latest drives from long after this version of *WICKEDVICAR*. Older WDC MCU architecture drives instead use values *0*, *1*, or *2* in this field. The value of identify device word 142 seems to be reliably usable as a marker for what firmware architecture type the drive has.
 
 # Drive Class
 
@@ -1314,7 +1316,7 @@ The implementation of [creating SA storage](#drive-class---writeresources---crea
 
 Some of these tests were done with actual physical drives, for which a photograph of the individual drive is included. Others were done on drive SA copies found in data recovery resource repositories, for which a photograph of a drive of the same model is included instead.
 
-In the tables below, *usable size* excludes areas made unaddressable by sector slipping. *Utilisation* gives SA usage against the usable size of the heads in use, and *free space utilisation* gives the total size of the identified extents against the free space available to them. Extents are only ever taken from head 0, so both figures are per-head, matching the per-head values shown in each table. The two *conflict* rows give the amount of those extents overlapping either an in-use SA file or an area left unaddressable by sector slipping, which is none on drives with no SA defects.
+In the tables below, *usable size* excludes areas made unaddressable by sector slipping, *utilisation* gives SA usage against the usable size of the heads in use, and *free space utilisation* gives extent usage of usable free space. The two *conflict* rows give the amount of those extents conflicting with either an SA module or an unusable area.
 
 ## SA Storage Size - WD800BB-00JHC0 (Sabre)
 

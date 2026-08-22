@@ -15,7 +15,7 @@ date: 2026-08-20
 
 Although the name *WICKEDVICAR* is not used here (only its driver [SLICKERVICAR](../slickervicar)), details relevant to it are included. It's described as a module for *UNITEDRAKE* (a.k.a. *EquationDrug* and *GrayFish*[^vb_unitedrake]) and *STRAITBIZARRE* (a.k.a. *SBZ*[^kaspersky_sbz], misspelled on the page as *STRAITBAZZARE*). Its stated purpose is to *upload the hard drive firmware onto the target machine to implant IRATEMONK and its payload*.
 
-The other internal NSA document relevant to *WICKEDVICAR*, and the only one explicitly referring to it by name, is a wiki page of project ideas for the *Persistence Division*. This document is introduced further in [IRATEMONK](../iratemonk#introduction), including heuristics dating it from roughly mid-2011 to early 2012. Here *WICKEDVICAR* is described as *used to perform remote survey and installation* and *interacting with the firmware implant from a Windows OS*:
+The other internal NSA document relevant to *WICKEDVICAR*, and the only one explicitly referring to it by name, is a wiki page of project ideas for the *Persistence Division*. This document is introduced further in [IRATEMONK](../iratemonk#introduction), including heuristics dating it from roughly mid-2011 to mid-2012. Here *WICKEDVICAR* is described as *used to perform remote survey and installation* and *interacting with the firmware implant from a Windows OS*:
 
 ![intern projects SSD support part 3](intern_projects_ssd_part_3.png)
 
@@ -105,7 +105,7 @@ Signature | Description
 
 For an analogy to conventional storage, the *extents* layer is similar to a volume manager like LVM, mapping a single logical volume to multiple separate lower-level storage areas, while an *allocation* is similar to a partition, representing a contiguous assigned area within that volume, allocated on a first-fit basis.
 
-This data storage area is bootstrapped and initialised within the [drive class](#drive-types---drive-class) method *WriteResources*, where the *extents* of the storage area are reserved with a method specific to each drive type. For Western Digital Marvell, the directory of the system area is dynamically parsed to locate unused areas, with every contiguous free area of at least 16 sectors used as an *extent*. For Seagate F3, the *extents* used are pre-determined within the *WriteResources* container, and presumably assigned based on areas known to be unused by the firmware.
+This data storage area is bootstrapped and initialised within the [drive class](#drive-types---drive-class) method *WriteResources*, where the *extents* of the storage area are reserved with a method specific to each drive type. For Western Digital Marvell, the directory of the SA is dynamically parsed to locate unused areas, with every contiguous free area of at least 16 sectors used as an *extent*. For Seagate F3, the *extents* used are pre-determined within the *WriteResources* container, and presumably assigned based on areas known to be unused by the firmware.
 
 ## SA Storage - Metadata
 
@@ -196,9 +196,9 @@ This allocation type ID is only directly referenced in the [Western Digital Marv
 
 Allocation ID `0x100` appears to be an SA storage allocation completely separate from firmware-implant-related functionality. It is the only allocation that can possibly be created outside [drive class](#drive-types---drive-class) method *WriteResources*, and in fact the only allocation that no *WriteResources* implementation references. It is also the only allocation for which granular external access is provided, through [operation SA storage CRUD](#operations---sa-storage---crud).
 
-It has the largest possible size of any SA storage allocation, with no limit directly enforced and the size only bounded by the 32-bit *sector count* field of a [metadata](#sa-storage---metadata) allocation entry. This gives it a maximum theoretical size of 2 TiB, though no hard drive actually has a system area that large.
+It has the largest possible size of any SA storage allocation, with no limit directly enforced and the size only bounded by the 32-bit *sector count* field of a [metadata](#sa-storage---metadata) allocation entry. This gives it a maximum theoretical size of 2 TiB, though no hard drive actually has an SA that large.
 
-This allocation appears intended as an external interface for read and write access to an area of arbitrary data storage in the drive SA, offering sector-addressed access within that storage for a purpose such as a virtual file system. That interface is exposed through [operation SA storage CRUD](#operations---sa-storage---crud), likely for use by other *UNITEDRAKE* modules to store their data.
+This allocation appears intended as an external interface for read and write access to an area of arbitrary data storage in the drive SA, offering sector-addressed access within that storage for a purpose such as a virtual filesystem. That interface is exposed through [operation SA storage CRUD](#operations---sa-storage---crud), likely for use by other *UNITEDRAKE* modules to store their data.
 
 ### SA Storage - Allocations - SIERRAMIST
 
@@ -316,8 +316,8 @@ Offset | Size | Type | Value | Description
 `0x2` | 4 | `uint32_t` | | Controller index
 `0x6` | 4 | `uint32_t` | | Channel index
 `0xA` | 2 | `uint16_t` | | ATA device register
-`0xC` | 41 | `char[41]` | | Model
-`0x35` | 21 | `char[21]` | | Serial
+`0xC` | 41 | `char[41]` | | Model, null-terminated
+`0x35` | 21 | `char[21]` | | Serial, null-terminated
 `0x4A` | 9 | `char[9]` | | Firmware revision
 `0x53` | 2 | `uint16_t` | | ATA major version (*IDENTIFY DEVICE* word 80)
 `0x55` | 8 | `uint64_t` | | Sector count
@@ -426,7 +426,7 @@ Each request takes a *target ID* parameter that selects the target of the operat
 
 ID | Allocations | Drive types | Description
 ---|---|---|---
- 1 | *N/A* | Seagate (ST10) | Bypasses standard [SA storage](#sa-storage), directly using an unknown Vendor-Unique Command (VUC) protocol
+ 1 | *N/A* | Seagate (ST10) | Bypasses standard [SA storage](#sa-storage), directly using an unknown Vendor Unique Command (VUC) protocol
  2 | [Implant data](#sa-storage---allocations---implant-data), [SIERRAMIST](#sa-storage---allocations---sierramist) | All | Implant data and payload
  4 | [Covert storage](#sa-storage---allocations---covert-storage) | All | Covert storage
 
@@ -492,7 +492,7 @@ For input data this operation takes a null-terminated file path and returns no o
 
 Operation ID `0x5E` handles complete Create, Read, Update, and Delete (CRUD) functionality for the [covert storage allocation](#sa-storage---allocations---covert-storage), and supports only target *covert storage* (ID 4).
 
-Unlike other allocations, which can only have their entire contents read or written at once, this provides the ability to read or write any given area within the *covert storage* allocation. As noted under [covert storage](#sa-storage---allocations---covert-storage), this appears intended as an external interface for arbitrary data storage in the drive SA, with granular sector-level access suited to a purpose such as a virtual file system.
+Unlike other allocations, which can only have their entire contents read or written at once, this provides the ability to read or write any given area within the *covert storage* allocation. As noted under [covert storage](#sa-storage---allocations---covert-storage), this appears intended as an external interface for arbitrary data storage in the drive SA, with granular sector-level access suited to a purpose such as a virtual filesystem.
 
 This operation takes variable-size input data that begins with the following structure:
 
@@ -585,7 +585,7 @@ The compile timestamp of *15 June 2010 16:23:37 UTC* seems appropriate, matching
 
 The lower [supported drive type IDs](#drive-types) appear to have been originally implemented to target some exceptionally old drive models. The *Seagate (ST10)* drive type uses some VUCs only supported by the *U series* firmware architecture used in drives dating from 1999 to 2002. Meanwhile, the *Western Digital (WDC MCU)* drive type appears to have originally been developed for WD's older *native mode* VUC system used in drives from approximately 1999 to 2004, with WD's later SMART Command Transport (SCT)-based VUCs for newer WDC MCU models apparently refactored into the drive type only later.
 
-The order of drive type implementation also gives some temporal clues, with each of the first three drive types appearing to have been implemented around the same period in numeric order of their IDs. The order of *Seagate (ST10)*, then *Maxtor*, then *Western Digital (WDC MCU)* makes perfect sense if they were developed in a period when that was the order of market share. Seagate held first place throughout this period[^market_2001], with only second place changing hands. From the late 1990s through 2000, Quantum was second instead of Maxtor[^market_1997][^market_2000], with Maxtor only gaining that position by 2001[^market_2001] after Quantum was acquired. Western Digital then rapidly gained prominence during 2002 and 2003 while Maxtor declined[^market_2002_2003][^market_2003_2004], with Western Digital overtaking Maxtor for second place by the end of 2004[^market_2003_2004]. As such, a specific time period exists that matches the implemented order exactly: roughly 2001 to 2004. After 2004, Maxtor's third-place and rapidly dropping market share would have made it a poor choice as the primary development target for a forward-looking persistence capability.
+The order of drive type implementation also gives some temporal clues, with each of the first three drive types appearing to have been implemented around the same period in numeric order of their IDs. The order of *Seagate (ST10)*, then *Maxtor*, then *Western Digital (WDC MCU)* makes perfect sense if they were developed in a period when that was the order of market share. Seagate held first place throughout this period[^market_2001], with only second place changing hands. From the late 1990s to 2000, Quantum was second instead of Maxtor[^market_1997][^market_2000], with Maxtor only gaining that position by 2001[^market_2001] after Quantum was acquired. Western Digital then rapidly gained prominence during 2002 and 2003 while Maxtor declined[^market_2002_2003][^market_2003_2004], with Western Digital overtaking Maxtor for second place by the end of 2004[^market_2003_2004]. As such, a specific time period exists that matches the implemented order exactly: roughly 2001 to 2004. After 2004, Maxtor's third-place and rapidly dropping market share would have made it a poor choice as the primary development target for a forward-looking persistence capability.
 
 *WICKEDVICAR* appears to be the product of many years of development by multiple individuals, each with a different level of domain-specific knowledge and a different programming style. In particular, the implementation of a [specific Western Digital Marvell sub-variant](wd_marvell#conclusion) appears to be the work of a developer with shallow general knowledge of hard drive design but extensive knowledge of the proprietary SA structures used in WD drives. That combination is what would be expected of a generalist given detailed vendor documentation to work from.
 

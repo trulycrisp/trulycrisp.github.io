@@ -13,7 +13,7 @@ Despite the lack of any sample, many technical details of this firmware implant 
 
 This wiki page details potential projects for *interns*, a term which seemingly refers to the NSA's *Computer Network Operations Development Program*[^nsa_cnodp], where military and intelligence-community personnel from outside the agency do a temporary tour working within the NSA.
 
-The wiki page itself is undated. However, the content gives enough detail to roughly infer the time period it was written in. The mention of Windows 7 as a supported operating system gives a floor of late 2009[^windows_7_release], while the complete absence of any Windows 8 mention gives a likely ceiling of late 2012[^windows_8_release]. The mention of *newest Seagate drives including their hybrid drive products* likely raises the floor to mid-2010, when Seagate released their flagship *Momentus XT* hybrid drive model[^seagate_momentus_xt_release]. The most revealing detail may be a mention of BTRFS as *slated to become the default in Fedora Core 17 or 18*: Fedora 16 reached feature freeze in July 2011[^fedora_16_schedule], with default BTRFS still under consideration mere weeks earlier[^fedora_16_btrfs], while Fedora 17 reached feature freeze in February 2012 and final release in May 2012[^fedora_17_schedule]. The naming of Fedora 17 or 18 rather than 16 raises the floor to mid-2011, when 16 dropped BTRFS as its default, while the change still being only *slated* gives a ceiling of Fedora 17's release. These various details together allow dating this wiki page to a plausible period of roughly mid-2011 to early 2012, showing the current state of *IRATEMONK* development at that time.
+The wiki page itself is undated. However, the content gives enough detail to roughly infer the time period it was written in. The mention of Windows 7 as a supported operating system gives a floor of late 2009[^windows_7_release], while the complete absence of any Windows 8 mention gives a likely ceiling of late 2012[^windows_8_release]. The mention of *newest Seagate drives including their hybrid drive products* likely raises the floor to mid-2010, when Seagate released their flagship *Momentus XT* hybrid drive model[^seagate_momentus_xt_release]. The most revealing detail may be a mention of BTRFS as *slated to become the default in Fedora Core 17 or 18*: Fedora 16 reached feature freeze in July 2011[^fedora_16_schedule], with default BTRFS still under consideration mere weeks earlier[^fedora_16_btrfs], while Fedora 17 reached feature freeze in February 2012 and final release in May 2012[^fedora_17_schedule]. The naming of Fedora 17 or 18 rather than 16 raises the floor to mid-2011, when 16 dropped BTRFS as its default, while the change still being only *slated* gives a ceiling of Fedora 17's release. These various details together allow dating this wiki page to a plausible period of roughly mid-2011 to mid-2012, showing the current state of *IRATEMONK* development at that time.
 
 # Why
 
@@ -36,7 +36,7 @@ This storage limitation is demonstrated by other firmware capabilities developed
 
 As detailed in the above catalogue page, even when targeting the BIOS, the drive had to be targeted as well. Due to storage limitations, a Host Protected Area (HPA) was required on the computer's drive for the BIOS implant to use as storage space. If the drive had to be targeted regardless, there was little reason not to develop a drive-only technique, without the complexity of having to target multiple separate components. These practical realities make drive firmware persistence a natural choice.
 
-By all indications, developing the capability to persist entirely within a drive's firmware may have made other firmware persistence techniques for personal computers obsolete within the NSA, not supplementing but outright replacing them as a superior option. Within the previously detailed *intern projects* document, dating to at least mid-2011, it's mentioned that their BIOS persistence capability SWAP only supported IDE hardware that had by then been obsolescent for half a decade, suggesting it was no longer a significant focus of active development:
+By all indications, developing the capability to persist entirely within a drive's firmware may have made other firmware persistence techniques for personal computers obsolete within the NSA, not supplementing but outright replacing them as a superior option. Within the previously detailed *intern projects* document, dating to at least mid-2011, it's mentioned that their BIOS persistence capability *SWAP* only supported IDE hardware that had by then been obsolescent for half a decade, suggesting it was no longer a significant focus of active development:
 
 ![SWAP IDE hardware](intern_projects_stylishchamp.png)
 
@@ -70,7 +70,7 @@ The section above is extremely revealing. Not only did the NSA have the knowledg
 
 As the world's premier signals intelligence organisation, the NSA would inevitably encounter challenges requiring the extraction of intelligence from storage media in a massive range of conditions, including, no doubt, drives that had been intentionally or inadvertently damaged, or whose data was otherwise not immediately accessible. It's therefore unsurprising that they would invest in the same expertise and capabilities as the commercial data recovery industry, but in-house, for use within their security and classification requirements.
 
-Even without any initial objective of firmware implant development, any organisation like the NSA would inevitably obtain the very same deep technical expertise required to develop such a capability, purely as a side-effect of their data recovery requirements.
+Even without any initial objective of firmware implant development, any organisation like the NSA would inevitably obtain the very same deep technical expertise required to develop such a capability, purely as a side effect of their data recovery requirements.
 
 The project for implementing SSD support also gives significant insight into how these firmware implants are developed and the type of resources used:
 
@@ -94,7 +94,7 @@ Implants are *productized* and deployed as an entire *firmware image*: an origin
 
 # IMBIOS
 
-The [ANT catalogue page](../ant_catalogue.jpg) describes the main functionality of these firmware implants as executing a payload in the host operating system by substituting an alternate Master Boot Record (MBR) boot-sector. This boot-sector payload is referred to in the [intern projects](#introduction) document as *IMBIOS* (**I**rate **M**onk BIOS?), described as specific to each individual drive type and implemented in a combination of assembly and C code:
+The [ANT catalogue page](../ant_catalogue.jpg) describes the main functionality of these firmware implants as executing a payload in the host operating system by substituting an alternate Master Boot Record (MBR) boot sector. This boot-sector payload is referred to in the [intern projects](#introduction) document as *IMBIOS* (**I**rate **M**onk BIOS?), described as specific to each individual drive type and implemented in a combination of assembly and C code:
 
 ![intern projects SSD support part 2](intern_projects_ssd_part_2.png)
 
@@ -142,11 +142,11 @@ From the description above it can be inferred that *CASTLECRASHER* executes in *
 
 From the details covered above, the likely process by which *IRATEMONK* executes a payload in a Windows operating system can be reconstructed:
 
-* *IRATEMONK* presents the *IMBIOS* MBR boot-sector to the host BIOS.
+* *IRATEMONK* presents the *IMBIOS* MBR boot sector to the host BIOS.
 * *IMBIOS* executes, uses VUCs to log deployment to *IRATEMONK* and load *SIERRAMIST* from the drive SA.
 * *SIERRAMIST* executes and writes *CASTLECRASHER* into an existing native-mode executable in the Windows NTFS partition.
-* Notified of deployment, *IRATEMONK* pauses substitution to present the real Windows boot-sector.
-* The Windows boot-sector executes (invoked by *IMBIOS* or *SIERRAMIST*, directly or through reboot), and Windows starts.
+* Notified of deployment, *IRATEMONK* pauses substitution to present the real Windows boot sector.
+* The Windows boot sector executes (invoked by *IMBIOS* or *SIERRAMIST*, directly or through reboot), and Windows starts.
 * *CASTLECRASHER* executes in Windows native mode, reflectively executing the final payload in another process.
 
 It's a complex but robust execution chain, dependent only on the filesystem format and location of a single key executable file, and likely stable even between major Windows versions. A design intended for reliable long-term persistence on a high-value individual's personal computer.

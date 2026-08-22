@@ -5,11 +5,11 @@ date: 2026-06-08
 
 *This page references many technical terms and concepts detailed in the [Overview](../overview) page, which should be read first.*
 
-*Code demonstrating topics covered in this page can by found in the [Psychite](https://github.com/trulycrisp/psychite) repository*.
+*Code demonstrating topics covered in this page can be found in the [Psychite](https://github.com/trulycrisp/psychite) repository.*
 
 # Introduction
 
-The Phison S11/3111 is one of the most common controllers used in SATA SSDs today, particularly for budget drives, with one drive model using this controller selling over 100 million units[^kingston_a400]. Although not the only SATA SSD controller Phison currently produces[^phison_controllers] it's by far the most popular due to its low cost, S11 controllers are more commonly found in drives today than all other Phison SATA controllers combined. Manufacturers like Phison let smaller companies create and sell a unique SSD product without having to develop an entire controller and firmware platform themselves, Phison will sell vendors a base hardware and firmware package they can customise for their specific needs. For Phison controllers such as the S11 a vendor can purchase anything from a complete off-the-shelf reference design with vendor branding to a co-developed custom design where the S11 controller is combined with a custom PCB, specific NAND flash chips, and customised firmware. Although each drive model with an S11 controller has variations in branding or customisation, the controller hardware and core firmware of these drives are always the same.
+The Phison S11/3111 is one of the most common controllers used in SATA SSDs today, particularly for budget drives, with one drive model using this controller selling over 100 million units[^kingston_a400]. Although not the only SATA SSD controller Phison currently produces[^phison_controllers], it's by far the most popular due to its low cost, with S11 controllers more commonly found in drives today than all other Phison SATA controllers combined. Manufacturers like Phison let smaller companies create and sell a unique SSD product without having to develop an entire controller and firmware platform themselves, so Phison will sell vendors a base hardware and firmware package they can customise for their specific needs. For Phison controllers such as the S11 a vendor can purchase anything from a complete off-the-shelf reference design with vendor branding to a co-developed custom design where the S11 controller is combined with a custom PCB, specific NAND flash chips, and customised firmware. Although each drive model with an S11 controller has variations in branding or customisation, the controller hardware and core firmware of these drives are always the same.
 
 In the context of security this makes these drives a desirable target to attack, as a capability developed for this single controller can be used for many different drive models from many different vendors. The table below shows a sample of some drive models that use the S11 controller[^s11_drives]:
 
@@ -38,23 +38,23 @@ Toshiba/Kioxia | TR200
 
 # Hardware
 
-The S11 controller is a simple SOC design with a single core Xtensa processor, 32 KB mask ROM, 192 KB of Instruction RAM (IRAM), and 33 MB of SRAM. A block diagram showing the controller's components is included below:
+The S11 controller is a simple SOC design with a single-core Xtensa processor, 32 KB mask ROM, 192 KB of Instruction RAM (IRAM), and 33 MB of SRAM. A block diagram showing the controller's components is included below:
 
 ![Controller diagram](s11_controller_diagram.png)
 
-The Xtensa CPU has no Memory Management Unit (MMU) or Memory Protection Unit (MPU), all code executes with access to the entire physical address space, with full Read-Write-Execute (RWX) access to all memory. On power up the CPU executes code from the controller mask ROM, covered in section [Bootloader](#bootloader). The following shows a memory map of the address space within the controller:
+The Xtensa CPU has no Memory Management Unit (MMU) or Memory Protection Unit (MPU), so all code executes with access to the entire physical address space, with full Read-Write-Execute (RWX) access to all memory. On power up the CPU executes code from the controller mask ROM, covered in section [Bootloader](#bootloader). The following shows a memory map of the address space within the controller:
 
 ![Memory map](memory_map.svg)
 
-The main hardware-level attack surface of this controller is the UART and JTAG debug interfaces, which can be permanently disabled during the manufacturing process using eFuses. Testing of various drives found both of these debug interfaces were usually enabled at the hardware eFuse-level, however were not usable likely due to the firmware implementation.
+The main hardware-level attack surface of this controller is the UART and JTAG debug interfaces, which can be permanently disabled during the manufacturing process using eFuses. Testing of various drives found that both of these debug interfaces were usually enabled at the hardware eFuse-level, but were not usable, likely due to the firmware implementation.
 
-A physical JTAG interface was found on the reference PCB and most vendor PCBs, identified with a JTAG bypass scan. However this interface did not return an IDCODE and could not be used, even where the relevant eFuse left the hardware feature enabled. The pin-out of this JTAG interface is shown in the image below:
+A physical JTAG interface was found on the reference PCB and most vendor PCBs, identified with a JTAG bypass scan. However, this interface did not return an IDCODE and could not be used, even where the relevant eFuse left the hardware feature enabled. The pin-out of this JTAG interface is shown in the image below:
 
 ![JTAG pin-out](jtag_pinout.jpg)
 
 # Bootloader
 
-When the controller powers on, the CPU executes code from the controller's mask ROM. The 32,768 byte contents of the mask ROM are loaded to address `0x5C0D8000`, the same reset vector address the CPU then jumps to and executes. This ROM code is a minimal bootloader written in C and assembly, with the purpose of loading and executing the main firmware. Depending on when the controller was manufactured this bootloader has different versions with slight variations, observed version numbers are `2.0`, `7.0`, `9.0`, and `9.2`, of which `2.0` is by far the most common. The bootloader can load the main firmware through two methods: from flash for the standard boot process, or directly into memory by an external tool.
+When the controller powers on, the CPU executes code from the controller's mask ROM. The 32,768-byte contents of the mask ROM are loaded to address `0x5C0D8000`, the same reset vector address the CPU then jumps to and executes. This ROM code is a minimal bootloader written in C and assembly, with the purpose of loading and executing the main firmware. Depending on when the controller was manufactured, this bootloader has different versions with slight variations, with observed version numbers `2.0`, `7.0`, `9.0`, and `9.2`, of which `2.0` is by far the most common. The bootloader can load the main firmware through two methods: from flash for the standard boot process, or directly into memory by an external tool.
 
 ## Bootloader - Firmware Load From Flash
 
@@ -64,11 +64,11 @@ The firmware header is 4,096 bytes in size, and is always loaded into memory at 
 
 ![Firmware flash header](flash_header.svg)
 
-The firmware header starts with magic bytes `49 44` 'ID', followed by a sequence number incremented each time a new firmware header is written. The drive stores firmware as four duplicate copies for redundancy, two copies in the first Chip-Enable (CE) of each of the controller's two flash channels, and the header contains the block location of each in fields *channel `x` copy `y` block*.
+The firmware header starts with magic bytes `49 44` 'ID', followed by a sequence number incremented each time a new firmware header is written. The drive stores firmware as four duplicate copies for redundancy, two copies in the first Chip Enable (CE) of each of the controller's two flash channels, and the header contains the block location of each in fields *channel `x` copy `y` block*.
 
-The bootloader begins the firmware loading process by first executing the *setup* init script if the relevant fields are configured, as described in section [Init Scripts](#bootloader---firmware-load-from-flash---init-scripts). It then sequentially loads a set of firmware sections into memory depending on whether either the *normal* or *alternate* set of sections is enabled, if boolean field *alt-sections* is false it uses the *Nor-sect count* number of sections starting at section number *Nor-sect start*, otherwise it similarly uses *alt-sect count* and *alt-sect start*.
+The bootloader begins the firmware loading process by first executing the *setup* init script if the relevant fields are configured, as described in section [Init Scripts](#bootloader---firmware-load-from-flash---init-scripts). It then sequentially loads a set of firmware sections into memory depending on whether the *normal* or *alternate* set of sections is enabled. If boolean field *alt-sections* is false it uses the *Nor-sect count* number of sections starting at section number *Nor-sect start*, otherwise it similarly uses *alt-sect count* and *alt-sect start*.
 
-To load each section the bootloader reads the *section `x` page count* number of flash pages starting at page *section `x` page start* in the same flash block as the header, it loads these pages into memory starting at the address in field *section `x` address* with *section `x` size* as the total section size in bytes, use of this size field means section sizes are not required to be flash page aligned. If field *skip CRC* is false it then verifies the section's checksum, it calculates the checksum of all but the last 8 bytes of the section using the algorithm detailed in [CRC-32 Based Checksum](#algorithms---crc-32-based-checksum) with seed `0x55AA55AA`, verifying the result against the checksum value in the last 4 bytes of the section. After a section is loaded into memory it will execute the *section* and *trigger* init scripts if applicable, as detailed in [Init Scripts](#bootloader---firmware-load-from-flash---init-scripts).
+To load each section the bootloader reads the *section `x` page count* number of flash pages starting at page *section `x` page start* in the same flash block as the header, then loads these pages into memory starting at the address in field *section `x` address* with *section `x` size* as the total section size in bytes, so section sizes are not required to be flash page aligned. If field *skip CRC* is false it then verifies the section's checksum, calculating the checksum of all but the last 8 bytes of the section using the algorithm detailed in [CRC-32 Based Checksum](#algorithms---crc-32-based-checksum) with seed `0x55AA55AA`, verifying the result against the checksum value in the last 4 bytes of the section. After a section is loaded into memory it will execute the *section* and *trigger* init scripts if applicable, as detailed in [Init Scripts](#bootloader---firmware-load-from-flash---init-scripts).
 
 After all sections are loaded into memory the bootloader then optionally performs a memory copy to Xtensa Instruction RAM (IRAM), which starts at address `0x5C0C8000`. For the normal section set (field *alt-sections* false) if field *load IRAM N* is true, it does a memory copy using the source address in field *IRAM source normal-sections* and size in field *IRAM size normal-sections*. Similarly if the alternate section set is enabled (field *alt-sections* true) it uses fields *load IRAM A*, *IRAM source alt-sections*, and *IRAM size alt-sections*.
 
@@ -109,27 +109,27 @@ The *size code* field represents the size or data width used for all steps in th
 | 1 | 2 |
 | 2 | 1 |
 
-An init script has associated *address* and *length* fields in the firmware header, where *address* is the raw memory address where the script is located, and *length* is the number of entries the script has. These init scripts are able to be located using a raw memory address field instead of an offset due to the firmware header always being loaded to the static address `0x5C0D4000` by the bootloader, the address always points to some area within the firmware header itself.
+An init script has associated *address* and *length* fields in the firmware header, where *address* is the raw memory address where the script is located, and *length* is the number of entries the script has. These init scripts are able to be located using a raw memory address field instead of an offset due to the firmware header always being loaded to the static address `0x5C0D4000` by the bootloader, with the address always pointing to some area within the firmware header itself.
 
 For the standard boot process the firmware header supports three separate init scripts, executed at different stages of the firmware load process. The *setup* script is executed immediately as the firmware header is parsed, before any sections are loaded into memory. The *section* script is executed after each firmware section is loaded, for every section, the only script that can execute multiple times. And the *trigger* script is executed by a handler triggered after a specific section is loaded, gated by boolean field *trigger* with the section number in field *trigger section*.
 
-## Bootloader - Firmware Load In Memory
+## Bootloader - Firmware Load in Memory
 
-The bootloader has an alternate mode distinct from loading firmware from flash, commonly known in storage drive terminology as *safe mode*. This mode is entered either by the firmware load from flash process failing, by a hardware jumper on the PCB being bridged, or by the main firmware triggering it by setting the controller register at address `0x04000044` to `0x02` before initiating a reboot.
+The bootloader has an alternate mode distinct from loading firmware from flash, commonly known in storage drive terminology as safe mode. This mode is entered by the firmware load from flash process failing, by a hardware jumper on the PCB being bridged, or by the main firmware triggering it by setting the controller register at address `0x04000044` to `0x02` before initiating a reboot.
 
 In this state the bootloader activates the SATA interface with its own implementation of a minimal set of ATA commands, with the main intended purpose of implementing a method for external vendor tools to load firmware directly into controller memory through the standard host interface. The S11 bootloader implements this functionality through Vendor Unique Commands (VUCs), using the command system detailed in [Vendor Unique Commands](#vendor-unique-commands).
 
-## Bootloader - Firmware Load In Memory - Instruction RAM
+## Bootloader - Firmware Load in Memory - Instruction RAM
 
-To start the process of loading firmware into memory the sections resident in Xtensa Instruction RAM (IRAM) must be loaded first, using the VUC write operation *Program PRAM* `0x40`. This operation must be used by first executing VUC write operation *Set Parameter* `0x24` with relevant parameter data, this parameter data has the structure `4 byte address` `4 byte size`. With the destination address and size parameters set, the *Program PRAM* VUC is then executed with the relevant data, if bits 15:8 of the LBA register are non-zero (boolean true) this VUC also decrypts the data as described in [CRC-16 Based Cipher](#algorithms---crc-16-based-cipher) using a seed value derived from data received through VUC write operation *Send Seed* `0x80`. A maximum size of 65,536 bytes can be loaded in a single *Program PRAM* operation, so multiple may be required for a single section, this is repeated until all IRAM-resident sections are loaded into memory.
+To start the process of loading firmware into memory the sections resident in Xtensa Instruction RAM (IRAM) must be loaded first, using the VUC write operation *Program PRAM* `0x40`. This operation must be used by first executing VUC write operation *Set Parameter* `0x24` with relevant parameter data, which has the structure `4 byte address` `4 byte size`. With the destination address and size parameters set, the *Program PRAM* VUC is then executed with the relevant data, if bits 15:8 of the LBA register are non-zero (boolean true) this VUC also decrypts the data as described in [CRC-16 Based Cipher](#algorithms---crc-16-based-cipher) using a seed value derived from data received through VUC write operation *Send Seed* `0x80`. A maximum size of 65,536 bytes can be loaded in a single *Program PRAM* operation, so multiple may be required for a single section, and this is repeated until all IRAM-resident sections are loaded into memory.
 
 With the IRAM sections loaded, the VUC write operation *ISP Jump* `0xF` is executed to jump to the firmware entry point at address `0x5C0E0400`. This results in the bootloader executing and handing over control to the IRAM-loaded firmware, which must itself complete its own loading process.
 
-## Bootloader - Firmware Load In Memory - SRAM
+## Bootloader - Firmware Load in Memory - SRAM
 
 Firmware intended for in-memory execution, referred to as a *burner* in Phison terminology, is designed to implement a minimal set of functionality entirely in the Instruction RAM sections, without requiring any SRAM sections to be loaded. This minimal set of functionality implements everything necessary to load the remaining firmware, which uses the VUC system detailed in [Vendor Unique Commands](#vendor-unique-commands).
 
-Loading a firmware section into SRAM uses VUC write operation *Program PRAM ICode* `0xBD`. Register *LBA* bits 23:16 are the offset in units of 65,536 bytes from SRAM base address `0x60000400`, while *LBA* bits 15:8 being non-zero (boolean true) signify the final operation that completes all SRAM firmware loading. In contrast with the bootloader's *Program PRAM* operation using optional standard firmware encryption, data for *Program PRAM ICode* has non-optional encryption of simply XORing each byte with `0xFF`. A maximum size of 65,536 bytes can be loaded in a single *Program PRAM ICode* operation, so multiple may be required for a single section, this is repeated until all SRAM-resident sections are loaded into memory.
+Loading a firmware section into SRAM uses VUC write operation *Program PRAM ICode* `0xBD`. Register *LBA* bits 23:16 are the offset in units of 65,536 bytes from SRAM base address `0x60000400`, while *LBA* bits 15:8 being non-zero (boolean true) signify the final operation that completes all SRAM firmware loading. In contrast with the bootloader's *Program PRAM* operation using optional standard firmware encryption, data for *Program PRAM ICode* has non-optional encryption of simply XORing each byte with `0xFF`. A maximum size of 65,536 bytes can be loaded in a single *Program PRAM ICode* operation, so multiple may be required for a single section, and this is repeated until all SRAM-resident sections are loaded into memory.
 
 With all SRAM sections loaded into memory, the firmware loading process is now complete and the firmware fully operational.
 
@@ -137,9 +137,9 @@ With all SRAM sections loaded into memory, the firmware loading process is now c
 
 The firmware code used for the S11 controller is a Real Time Operating System (RTOS) based on a 2014-era version of ThreadX, with the version string `Copyright (c) 1996-2014 Express Logic Inc. * ThreadX Xtensa Version G5.6.5.8 SN: 3773-198-3201 *`. Although the controller only has a single processor core, the firmware makes use of task concurrency through ThreadX's multi-threading functionality. The firmware has three separate threads, `mainTask` for core high-level functionality such as ATA command handling, `ftlTask` for the Flash Translation Layer (FTL), and `flaTask` for NAND flash operations.
 
-S11 firmware is distributed as files with extension `.BIN`. These firmware files are designed to be usable both to update the existing firmware on a drive through the standard ATA *DOWNLOAD MICROCODE* `0x92` command, and usable for manufacturing or repair where the drive currently has no functional firmware installed. This dual-purpose is achieved by having each firmware file actually contain two separate firmware images, the standard firmware intended for installation to a drive, and the *burner* firmware intended for loading into memory from the bootloader to install the aforementioned standard firmware. The *burner* component is unused when sent to the drive as a firmware update, its only purpose is for loading into memory by Phison vendor tools, as detailed in [Firmware Load in Memory](#bootloader---firmware-load-in-memory).
+S11 firmware is distributed as files with extension `.BIN`. These firmware files are designed to be usable both to update the existing firmware on a drive through the standard ATA *DOWNLOAD MICROCODE* `0x92` command, and usable for manufacturing or repair where the drive currently has no functional firmware installed. This dual purpose is achieved by having each firmware file actually contain two separate firmware images, the standard firmware intended for installation to a drive, and the *burner* firmware intended for loading into memory from the bootloader to install the aforementioned standard firmware. The *burner* component is unused when sent to the drive as a firmware update, and its only purpose is for loading into memory by Phison vendor tools, as detailed in [Firmware Load in Memory](#bootloader---firmware-load-in-memory).
 
-The firmware format begins with a 512 byte header with the following structure:
+The firmware format begins with a 512-byte header with the following structure:
 
 ![Firmware header](firmware_header.svg)
 
@@ -149,19 +149,19 @@ The burner code begins immediately after the header with the size in bytes given
 
 ## Firmware - Format - Code Segment
 
-Each code segment begins with 16,384 bytes of data called a *seed*, this seed starts with a 1,024 byte header with the following structure:
+Each code segment begins with 16,384 bytes of data called a *seed*, which starts with a 1,024-byte header with the following structure:
 
 ![Seed header](seed_header.svg)
 
 Depending on the type of code, burner or normal, this seed header uses a different set of fields which contain the load address and size in bytes of each section in the code. Following the header, the remaining data of the seed is a key used to decrypt the code.
 
-Following the seed, the remaining data of the code segment is the encrypted data of each section appended sequentially, the encryption used varies based on whether it is burner code or normal code. For burner code all instruction RAM (IRAM) sections are just encrypted with the cipher detailed in [CRC-16 Based Cipher](#algorithms---crc-16-based-cipher) with a seed value derived from the key data of the segment seed detailed above, while SRAM sections simply have each byte XORd with `0xFF`. Normal code is encrypted the same as the burner code IRAM sections with the same CRC-16 based cipher, however optionally with an additional layer of scrambling with the algorithm detailed in [XOR 0561](#algorithms---xor-0561), whether XOR 0561 is used varies by firmware version and is possibly related to the type of flash it's intended for.
+Following the seed, the remaining data of the code segment is the encrypted data of each section appended sequentially, with the encryption used varying based on whether it is burner code or normal code. For burner code all Instruction RAM (IRAM) sections are just encrypted with the cipher detailed in [CRC-16 Based Cipher](#algorithms---crc-16-based-cipher) with a seed value derived from the key data of the segment seed detailed above, while SRAM sections simply have each byte XORed with `0xFF`. Normal code is encrypted the same as the burner code IRAM sections with the same CRC-16 based cipher, but optionally with an additional layer of scrambling with the algorithm detailed in [XOR 0561](#algorithms---xor-0561), and whether XOR 0561 is used varies by firmware version and is possibly related to the type of flash it's intended for.
 
 ## Firmware - Format - Signature
 
 The firmware format has the optional capability to include a nominal cryptographic signature for the normal code segment, intended to verify it is legitimate and has not been tampered with. This signature is included as a separate segment in the firmware format, with a total size of 3,072 bytes.
 
-This signature starts with a 512 byte header with an unknown structure. Although examining examples of these headers in Phison factory firmware shows they clearly have some defined structure with fields, no fields within it are actually extracted or parsed by the firmware during the firmware update process, and it's simply used as a single opaque block of arbitrary data. An example of one of these signature headers in a factory firmware file is included below:
+This signature starts with a 512-byte header with an unknown structure. Although examining examples of these headers in Phison factory firmware shows they clearly have some defined structure with fields, no fields within it are actually extracted or parsed by the firmware during the firmware update process, and it's simply used as a single opaque block of arbitrary data. An example of one of these signature headers in a factory firmware file is included below:
 
 ```
 00000000: 43 4f 44 45 20 42 4c 4f 43 4b 55 aa aa 55 00 ff 50 30 30 38 00 00 02 02 50 53 33 31 31 31 00 00  CODE BLOCKU..U..P008....PS3111..
@@ -182,61 +182,61 @@ This signature starts with a 512 byte header with an unknown structure. Although
 000001e0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................................
 ```
 
-The header detailed above is then followed by a 256 byte RSA signature. This signature is generated by prepending the previous header data to the normal code segment, hashing the result with SHA256, and encrypting the resulting hash with RSA.
+The header detailed above is then followed by a 256-byte RSA signature. This signature is generated by prepending the previous header data to the normal code segment, hashing the result with SHA-256, and encrypting the resulting hash with RSA.
 
-The RSA signature data is then followed by the 256 byte RSA public modulus used to verify the signature, 1,024 padding bytes, and then [XOR 0561](#algorithms---xor-0561) obfuscated SHA-256 round constants and initial values used for the hash in the signature.
+The RSA signature data is then followed by the 256-byte RSA public modulus used to verify the signature, 1,024 padding bytes, and then [XOR 0561](#algorithms---xor-0561) obfuscated SHA-256 round constants and initial values used for the hash in the signature.
 
 # Vendor Unique Commands
 
 The S11 uses a Vendor Unique Command (VUC) system of avoiding the designated vendor-specific ATA opcodes, and instead implementing extra functionality when standard ATA commands are executed with specific magic parameters. VUC requires a sequence of two separate ATA commands, first a *STANDBY IMMEDIATE* `0xE0` command with magic register values, followed by either a *READ SECTOR(S) (without retry)* `0x21` command for a read or a *WRITE SECTOR(S) (without retry)* `0x31` command for a write.
 
-The *STANDBY IMMEDIATE* `0xE0` command uses magic register values `0x6F` for *Count* and `0xFAEFFE` for *LBA*, Phison vendor tools refer to this command as *set AP key*. This command enables a temporary alternate VUC mode for the `0x21` and `0x31` commands, where the next of either of those commands is handled as a VUC. This temporary VUC mode can also be deactivated by the same `0xE0` command with magic register values `0x90` for *Count* and `0x51001` for *LBA*, which Phison vendor tools refer to as *unset AP key*.
+The *STANDBY IMMEDIATE* `0xE0` command uses magic register values `0x6F` for *Count* and `0xFAEFFE` for *LBA*, and Phison vendor tools refer to this command as *set AP key*. This command enables a temporary alternate VUC mode for the `0x21` and `0x31` commands, where the next of either of those commands is handled as a VUC. This temporary VUC mode can also be deactivated by the same `0xE0` command with magic register values `0x90` for *Count* and `0x51001` for *LBA*, which Phison vendor tools refer to as *unset AP key*.
 
 The specific VUC operation is selected by the *Feature* register value of the *READ SECTOR(S) (without retry)* `0x21` or *WRITE SECTOR(S) (without retry)* `0x31` command, with the *LBA* register used for parameters.
 
 A list of identified VUC operations is included below:
 
-| Operation | Name | Description |
-|---|---|---|
-| 0x1 | Restart | Soft restart |
-| 0x2 | Reset Smart | Reset SMART |
-| 0x8 | Preformat | Format/initialise System Area |
-| 0xF | ISP Jump | Jump to code in RAM |
-| 0x10 | Read Flash | Read raw flash page |
-| 0x12 | Read SRAM | Read SRAM memory |
-| 0x13 | System Info | Read system information |
-| 0x14 | Flash Id | Read flash ID for one CE |
-| 0x15 | Flash Id All | Read flash ID for all CEs |
-| 0x20 | Write Flash | Write raw flash page |
-| 0x22 | Erase Flash | Erase raw flash block |
-| 0x24 | Set Parameter | Set VUC parameter data for next command |
-| 0x25 | Write Info Block | Write drive configuration data |
-| 0x26 | Erase All Block | Erase all blocks |
-| 0x28 | Read Info Block | Read drive configuration data |
-| 0x30 | Check CRC | Verify CRC of code in RAM |
-| 0x31 | Verify Flash | Read installed firmware from flash |
-| 0x40 | Program PRAM | Write code to instruction RAM |
-| 0x41 | Program Flash Header | Write firmware header to flash |
-| 0x60 | Write Register | Write memory value |
-| 0x61 | Read Register | Read memory value |
-| 0x80 | Send Seed | Send firmware metadata/seed |
-| 0x82 | Program Flash Code | Write firmware code to flash |
-| 0xA7 | ONFI Parameter Page | Read ONFI parameter page |
-| 0xBD | Program PRAM ICode | Write code to SRAM |
-| 0xBE | Verify PRAM ICode | Read back code from SRAM |
-| 0xC4 | VUC Unlock Start | Start VUC unlock sequence |
-| 0xC5 | VUC Unlock Read | Read VUC unlock challenge |
-| 0xC6 | VUC Unlock Write | Write VUC unlock response |
-| 0xC7 | VUC Lock | Lock VUC access |
-| 0xDA | Read Product History | Read product history data |
-| 0xDB | Write Product History | Write product history data |
-| 0xFB | Block Map | Read map of flash blocks for first CE of channel |
+Operation | Name | Description
+---|---|---
+`0x1` | Restart | Soft restart
+`0x2` | Reset Smart | Reset SMART
+`0x8` | Preformat | Format/initialise System Area
+`0xF` | ISP Jump | Jump to code in RAM
+`0x10` | Read Flash | Read raw flash page
+`0x12` | Read SRAM | Read SRAM memory
+`0x13` | System Info | Read system information
+`0x14` | Flash ID | Read flash ID for one CE
+`0x15` | Flash ID All | Read flash ID for all CEs
+`0x20` | Write Flash | Write raw flash page
+`0x22` | Erase Flash | Erase raw flash block
+`0x24` | Set Parameter | Set VUC parameter data for next command
+`0x25` | Write Info Block | Write drive configuration data
+`0x26` | Erase All Block | Erase all blocks
+`0x28` | Read Info Block | Read drive configuration data
+`0x30` | Check CRC | Verify CRC of code in RAM
+`0x31` | Verify Flash | Read installed firmware from flash
+`0x40` | Program PRAM | Write code to Instruction RAM (IRAM)
+`0x41` | Program Flash Header | Write firmware header to flash
+`0x60` | Write Register | Write memory value
+`0x61` | Read Register | Read memory value
+`0x80` | Send Seed | Send firmware metadata/seed
+`0x82` | Program Flash Code | Write firmware code to flash
+`0xA7` | ONFI Parameter Page | Read ONFI parameter page
+`0xBD` | Program PRAM ICode | Write code to SRAM
+`0xBE` | Verify PRAM ICode | Read back code from SRAM
+`0xC4` | VUC Unlock Start | Start VUC unlock sequence
+`0xC5` | VUC Unlock Read | Read VUC unlock challenge
+`0xC6` | VUC Unlock Write | Write VUC unlock response
+`0xC7` | VUC Lock | Lock VUC access
+`0xDA` | Read Product History | Read product history data
+`0xDB` | Write Product History | Write product history data
+`0xFB` | Block Map | Read map of flash blocks for first CE of channel
 
 ## Vendor Unique Commands - Unlocking
 
-S11 firmware versions can optionally require an unlock procedure before sensitive VUCs are accessible, this uses a challenge-response scheme implemented in a subset of VUCs that are accessible before the drive is unlocked.
+S11 firmware versions can optionally require an unlock procedure before sensitive VUCs are accessible, using a challenge-response scheme implemented in a subset of VUCs that are accessible before the drive is unlocked.
 
-To start the unlock procedure [VUC System Info](#vendor-unique-commands---vuc-system-info) is executed to get the current lock state and configuration. The current state is in field *VUC mode*, and an identifier for the specific configured unlock key is in field *VUC key*, for firmware versions without any VUC lock support these fields will both be absent with null bytes in their place.
+To start the unlock procedure [VUC System Info](#vendor-unique-commands---vuc-system-info) is executed to get the current lock state and configuration. The current state is in field *VUC mode*, and an identifier for the specific configured unlock key is in field *VUC key*, and for firmware versions without any VUC lock support these fields will both be absent with null bytes in their place.
 
 The *VUC mode* field can be one of the following values:
 
@@ -257,11 +257,11 @@ VUC read operation *Unlock Read* `0xC5` is then used to read a single sector of 
 
 The challenge response, the encrypted challenge data, is then sent back to the drive using VUC write operation *Unlock Write* `0xC6`. If the challenge response is correct, the drive will then enter VUC mode *Unlocked* where VUCs are accessible.
 
-The drive can then optionally be returned to the default mode with VUC write operation *Lock* `0xC7` with a single sector of any data. 
+The drive can then optionally be returned to the default mode with VUC write operation *Lock* `0xC7` with a single sector of any data.
 
 ## Vendor Unique Commands - VUC System Info
 
-VUC read operation *System Info* `0x13` is the most basic and common VUC used, and the only one accessible when a drive is in a fully VUC locked state. It returns a 512 byte structure that includes a variety of information on flash geometry, controller hardware, and firmware state. The structure of key fields in this *System Info* data is shown below:
+VUC read operation *System Info* `0x13` is the most basic and common VUC used, and the only one accessible when a drive is in a fully VUC locked state. It returns a 512-byte structure that includes a variety of information on flash geometry, controller hardware, and firmware state. The structure of key fields in this *System Info* data is shown below:
 
 ![System info](system_info.svg)
 
@@ -269,7 +269,7 @@ VUC read operation *System Info* `0x13` is the most basic and common VUC used, a
 
 ## Algorithms - CRC-32 Based Checksum
 
-The S11 implements a custom 32-bit checksum algorithm loosely based on CRC-32, used for various purposes such as firmware verification. This algorithm is implemented in the controller hardware itself, the firmware code has no software implementation. It uses a variable initial seed value to generate a checksum over data, different seed values result in different output, and different seed values are used in the firmware for different specific purposes. A Python implementation of this checksum is included below:
+The S11 implements a custom 32-bit checksum algorithm loosely based on CRC-32, used for various purposes such as firmware verification. This algorithm is implemented in the controller hardware itself, and the firmware code has no software implementation. It uses a variable initial seed value to generate a checksum over data, where different seed values result in different output, and different seed values are used in the firmware for different specific purposes. A Python implementation of this checksum is included below:
 
 ```python
 def checksum_crc32(data: bytes, seed: int) -> int:
@@ -290,7 +290,7 @@ def checksum_crc32(data: bytes, seed: int) -> int:
 
 ## Algorithms - CRC-16 Based Cipher
 
-The S11 controller implements a custom and unusual symmetric stream cipher based on the CRC-16 checksum algorithm. The cipher generates a keystream from a 32-bit seed value used as a key, that keystream is then XORd with each byte of the plaintext for encryption, or inversely with ciphertext for decryption. This cipher is entirely implemented in controller hardware, and does not have any software implementation in the firmware.
+The S11 controller implements a custom and unusual symmetric stream cipher based on the CRC-16 checksum algorithm. The cipher generates a keystream from a 32-bit seed value used as a key, and that keystream is then XORed with each byte of the plaintext for encryption, or inversely with ciphertext for decryption. This cipher is entirely implemented in controller hardware, and does not have any software implementation in the firmware.
 
 This algorithm was likely chosen due to CRC-16 primitives already being hardware-accelerated in the controller, making it easier to implement hardware-accelerated than a more conventional symmetric cryptography standard algorithm. A Python implementation of this cipher is included below:
 
@@ -349,7 +349,7 @@ def cipher_crc16(data: bytes, seed: int, offset: int = 0) -> bytes:
 
 ## Algorithms - XOR 0561
 
-Phison NAND Flash Controllers (NFC) implement a pseudo-RNG based data scrambling algorithm applied to data stored on flash, variants of this same algorithm are commonly referred to as *XOR 0561* in data recovery resources. This algorithm works by generating a keystream that then has each byte XORd with the relevant data, the specifics of how the keystream is generated are unknown, however it is constant and static always resulting in the same data, and has a repeating period of 16,384 bytes.
+Phison NAND Flash Controllers (NFC) implement a pseudo-RNG based data scrambling algorithm applied to data stored on flash, with variants of this same algorithm commonly referred to as *XOR 0561* in data recovery resources. This algorithm works by generating a keystream that then has each byte XORed with the relevant data, and although the specifics of how the keystream is generated are unknown, it is constant and static, always resulting in the same data, and has a repeating period of 16,384 bytes.
 
 A sample of the first 512 bytes of the keystream is included below:
 
@@ -376,9 +376,9 @@ A sample of the first 512 bytes of the keystream is included below:
 
 Overall the security of the Phison S11 controller is poor, with no functional protections against malicious firmware modification or Vendor Unique Command (VUC) access.
 
-As detailed in [Firmware - Format - Signature](#firmware---format---signature) the nominal cryptographic signature in the firmware format is not only completely optional, able to be absent with no consequences, but also provides no actual security protections. The RSA public modulus used to verify the signature is itself contained in the signature data, meaning a valid signature can simply be generated with an arbitrary RSA keypair and added to a tampered firmware file, which a drive will accept and install. This signature is also only used through the standard firmware update procedure, using the ATA *DOWNLOAD MICROCODE* command, no signature is present with the firmware installed to flash, the only firmware verification the bootloader is capable of during the boot process is validating the simple 32-bit checksum detailed in [CRC-32 Based Checksum](#algorithms---crc-32-based-checksum). Even if a cryptographic signature of the firmware code was verified during boot, the [Init Scripts](#bootloader---firmware-load-from-flash---init-scripts) feature of the firmware metadata header provides arbitrary memory write primitives usable for code execution before the firmware code can even be loaded for verification.
+As detailed in [Firmware - Format - Signature](#firmware---format---signature), the nominal cryptographic signature in the firmware format is not only completely optional, able to be absent with no consequences, but also provides no actual security protections. The RSA public modulus used to verify the signature is itself contained in the signature data, meaning a valid signature can simply be generated with an arbitrary RSA key pair and added to a tampered firmware file, which a drive will accept and install. This signature is also only used through the standard firmware update procedure, using the ATA *DOWNLOAD MICROCODE* command, and no signature is present with the firmware installed to flash, so the only firmware verification the bootloader is capable of during the boot process is validating the simple 32-bit checksum detailed in [CRC-32 Based Checksum](#algorithms---crc-32-based-checksum). Even if a cryptographic signature of the firmware code was verified during boot, the [Init Scripts](#bootloader---firmware-load-from-flash---init-scripts) feature of the firmware metadata header provides arbitrary memory write primitives usable for code execution before the firmware code can even be loaded for verification.
 
-Outside of the above detailed firmware signature's non-functional use of RSA and SHA256, no legitimate cryptographic algorithms are used for any security feature. The main cipher used, such as for firmware encryption and VUC unlocking, is the dubious cipher detailed in [CRC-16 Based Cipher](#algorithms---crc-16-based-cipher) based on primitives of a non-cryptographic checksum, seemingly chosen for simplicity of hardware acceleration rather than security.
+Outside of the above detailed firmware signature's non-functional use of RSA and SHA-256, no legitimate cryptographic algorithms are used for any security feature. The main cipher used, such as for firmware encryption and VUC unlocking, is the dubious cipher detailed in [CRC-16 Based Cipher](#algorithms---crc-16-based-cipher) based on primitives of a non-cryptographic checksum, seemingly chosen for simplicity of hardware acceleration rather than security.
 
 Code to demonstrate these vulnerabilities, including reading and writing firmware from a drive, packing and unpacking firmware files for modification, and various low-level access to drive internals through VUCs, can be found in the [Psychite](https://github.com/trulycrisp/psychite) repository.
 
