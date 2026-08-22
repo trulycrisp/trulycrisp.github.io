@@ -33,15 +33,23 @@ The first of the above categories is by far the most numerous, with several such
 
 Was this emergence and wave of BIOS/UEFI persistence attacks being discovered caused by threat actors only adopting the technique in the late 2010s? A classified 2012-dated page from *Intellipedia*, the internal wiki of the US intelligence community, implies otherwise[^intellipedia], claiming not only that by then the technique was in active use by both Russian and Chinese intelligence, but that in 2010 such an attack had been found in Taiwanese critical infrastructure:
 
-<img src="intellipedia.png" alt="Intellipedia excerpt" width="800">
+<figure>
+    <a href="intellipedia.png" class="image-popup">
+        <img src="intellipedia.png" alt="Intellipedia excerpt" width="800">
+    </a>
+</figure>
 
 The more likely explanation for this late 2010s explosion in UEFI discoveries seems to be not that the technique suddenly entered use, but that before *LoJax* no-one considered it a serious threat, so no-one was looking for it.
 
-As detailed in the pages for each component, *IRATEMONK* appears to have an origin dating to the early 2000s, likely between 2001 and 2004, developed for hard drives dating as far back as the late 1990s. This would make *IRATEMONK* the earliest publicly known firmware persistence attack, beating *LoJax* by nearly two decades.
+As detailed in the pages for each component, *IRATEMONK* appears to have an origin dating to the early 2000s, likely between 2001 and 2004, developed for hard drives dating as far back as the late 1990s. This would make *IRATEMONK* the earliest publicly known firmware persistence attack, beating *LoJax* by over a decade.
 
 Despite its age, if job advertisements by American defence contractors are to be trusted, *IRATEMONK* or a capability like it may still be in use today[^job_ad]:
 
-<img src="job_ad.png" alt="Job advertisement" width="700">
+<figure>
+    <a href="job_ad.png" class="image-popup">
+        <img src="job_ad.png" alt="Job advertisement" width="700">
+    </a>
+</figure>
 
 Why hasn't such a capability been documented more recently, or been seen in use by other threat actors? As with the pre-*LoJax* UEFI era, maybe sometimes these discoveries have to wait for the right people to look for them.
 

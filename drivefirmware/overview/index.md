@@ -9,9 +9,17 @@ Storage drives are one of the more complex components you can find in a standard
 
 Example diagrams showing these components on a Phison S11 SATA SSD are included below: the first shows components on the PCB, and the second shows elements within the controller.
 
-![Product diagram](s11_product_diagram.png)
+<figure>
+    <a href="s11_product_diagram.png" class="image-popup">
+        <img src="s11_product_diagram.png" alt="Product diagram">
+    </a>
+</figure>
 
-![Controller diagram](s11_controller_diagram.png)
+<figure>
+    <a href="s11_controller_diagram.png" class="image-popup">
+        <img src="s11_controller_diagram.png" alt="Controller diagram">
+    </a>
+</figure>
 
 # Boot Process
 
@@ -29,9 +37,17 @@ Although safe mode can be entered automatically on drive failure as detailed abo
 
 At the lowest level, a drive accesses its storage medium through a system of physical addressing, reading and writing data by its physical location. For SSDs, this physical addressing system is standardised to use values of the die, plane, block, and page within a flash chip. For HDDs, it uses values of Cylinder, Head, and Sector (CHS) for a position on the magnetic disks.
 
-![NAND flash diagram](nand-flash-die-layout.png)
+<figure>
+    <a href="nand-flash-die-layout.png" class="image-popup">
+        <img src="nand-flash-die-layout.png" alt="NAND flash diagram">
+    </a>
+</figure>
 
-![CHS diagram](Cylinder_Head_Sector.png)
+<figure>
+    <a href="Cylinder_Head_Sector.png" class="image-popup">
+        <img src="Cylinder_Head_Sector.png" alt="CHS diagram">
+    </a>
+</figure>
 
 However, when a computer reads and writes data to the drive, it doesn't use a physical location but a Logical Block Address (LBA). Rather than an array of physical flash chips or platters, a drive presents its storage to a computer as a single continuous area of data, indexed by a sector offset within that data. Once the main firmware has been loaded by the bootloader and begins executing, it must then set up the subsystem handling access based on that logical addressing, converting those LBAs to physical locations on the storage medium. This subsystem is commonly called the Flash Translation Layer (FTL) for SSDs, or the Translator for hard drives.
 
@@ -45,7 +61,7 @@ This is solved by bootstrapping logical access, reading some of the necessary in
 
 # System Area
 
-This design of internal translation data being stored within the drive's main storage medium introduces the System Area (SA). For any storage drive, the data it stores is divided into two types: User Area data, which is all regular external data written to it as storage, and SA data, which is all other data used internally by the firmware. Although the SA is always at least partially designated by physical locations on the storage medium for critical data such as the L2P table, as detailed earlier, many drives also maintain a form of logical translation for SA data. Hard drives often have separate defect remapping specifically for the SA in addition to the standard P-List and G-List, and on Western Digital HDDs this is called the SA-List. For the Phison S11 SSD controller, critical SA data is all located by physical address based on page spare area magic signatures. However, some non-critical SA data, such as S.M.A.R.T. logs, is stored within a separate logically addressed SA managed by the FTL.
+This design of internal translation data being stored within the drive's main storage medium introduces the System Area (SA). For any storage drive, the data it stores is divided into two types: User Area data, which is all regular external data written to it as storage, and SA data, which is all other data used internally by the firmware. Although the SA is always at least partially designated by physical locations on the storage medium for critical data such as the L2P table, as detailed earlier, many drives also maintain a form of logical translation for SA data. Hard drives often have separate defect remapping specifically for the SA in addition to the standard P-List and G-List, and on Western Digital HDDs this is called the SA-List. For the Phison S11 SSD controller, critical SA data is all located by physical address based on page spare area magic signatures. However, some non-critical SA data, such as SMART logs, is stored within a separate logically addressed SA managed by the FTL.
 
 # Command Sets
 

@@ -9,7 +9,11 @@ date: 2026-08-20
 
 Despite the lack of any sample, many technical details of this firmware implant can be reconstructed from internal NSA documents. The [ANT catalogue page](../ant_catalogue.jpg)[^ant_catalogue_iratemonk] gives a high-level overview of the capability, seemingly written for an external audience such as other offices or agencies within the Five Eyes intelligence community. However, even more insightful is the internally focused documentation, written for the people who research and develop this capability. A single internal developer document relating to this firmware implant is publicly available: a wiki-style page from the NSA's *S3285 Persistence Division* titled [intern projects](../nsa_intern_projects.pdf)[^nsa_intern_projects].
 
-![intern projects](intern_projects_header.png)
+<figure>
+    <a href="intern_projects_header.png" class="image-popup">
+        <img src="intern_projects_header.png" alt="intern projects">
+    </a>
+</figure>
 
 This wiki page details potential projects for *interns*, a term which seemingly refers to the NSA's *Computer Network Operations Development Program*[^nsa_cnodp], where military and intelligence-community personnel from outside the agency do a temporary tour working within the NSA.
 
@@ -19,7 +23,11 @@ The wiki page itself is undated. However, the content gives enough detail to rou
 
 The [intern projects](#introduction) document describes an additional purpose for this drive firmware implant not mentioned in the [ANT catalogue page](../ant_catalogue.jpg). In addition to persistent execution of a payload, it provides a capability of *covert storage* in the drive System Area (SA), storing arbitrary external data in an internal reserved area of the drive that's otherwise inaccessible:
 
-![covert storage mention](intern_projects_covert_storage.png)
+<figure>
+    <a href="intern_projects_covert_storage.png" class="image-popup">
+        <img src="intern_projects_covert_storage.png" alt="covert storage mention">
+    </a>
+</figure>
 
 The paragraph above also mentions an important advantage of drive firmware implants over other comparable firmware persistence techniques such as BIOS attacks: the capability of *storage* available to the implant, usable for features such as *persistence logs*.
 
@@ -30,7 +38,11 @@ This storage limitation is demonstrated by other firmware capabilities developed
 <details markdown="1">
 <summary>ANT catalogue SWAP page</summary>
 
-![ANT catalogue SWAP page](ant_catalogue_swap.jpg)
+<figure>
+    <a href="ant_catalogue_swap.jpg" class="image-popup">
+        <img src="ant_catalogue_swap.jpg" alt="ANT catalogue SWAP page">
+    </a>
+</figure>
 
 </details>
 
@@ -38,7 +50,11 @@ As detailed in the above catalogue page, even when targeting the BIOS, the drive
 
 By all indications, developing the capability to persist entirely within a drive's firmware may have made other firmware persistence techniques for personal computers obsolete within the NSA, not supplementing but outright replacing them as a superior option. Within the previously detailed *intern projects* document, dating to at least mid-2011, it's mentioned that their BIOS persistence capability *SWAP* only supported IDE hardware that had by then been obsolescent for half a decade, suggesting it was no longer a significant focus of active development:
 
-![SWAP IDE hardware](intern_projects_stylishchamp.png)
+<figure>
+    <a href="intern_projects_stylishchamp.png" class="image-popup">
+        <img src="intern_projects_stylishchamp.png" alt="SWAP IDE hardware">
+    </a>
+</figure>
 
 # How
 
@@ -64,7 +80,11 @@ One key piece of information often unmentioned in speculation such as that quote
 
 This connection between proprietary drive vendor knowledge and data recovery is explicitly made in the following section of the page:
 
-![data recovery](intern_projects_data_recovery.png)
+<figure>
+    <a href="intern_projects_data_recovery.png" class="image-popup">
+        <img src="intern_projects_data_recovery.png" alt="data recovery">
+    </a>
+</figure>
 
 The section above is extremely revealing. Not only did the NSA have the knowledge of low-level drive internals necessary for complex data recovery tasks, but that knowledge was also institutionally organised within the same division tasked with developing drive firmware implants for offensive use.
 
@@ -74,33 +94,57 @@ Even without any initial objective of firmware implant development, any organisa
 
 The project for implementing SSD support also gives significant insight into how these firmware implants are developed and the type of resources used:
 
-![SSD support](intern_projects_ssd.png)
+<figure>
+    <a href="intern_projects_ssd.png" class="image-popup">
+        <img src="intern_projects_ssd.png" alt="SSD support">
+    </a>
+</figure>
 
 The above project states this explicitly: implant support for a new drive type is developed through prior *SSD research* combined with *reverse engineering SSD firmware*, not by modifying and building firmware source code as some speculation suggested. The implant is described as comprising both low-level assembly and high-level C code, compiled and inserted *inside of a firmware image*. It is characterised as an *IRATEMONK algorithm*, a single common core design that's simply implemented for each drive type.
 
 The section introducing a series of Computer Network Attack (CNA) project ideas gives an estimate of how much work these *intern projects* are expected to require. From this we can infer that developing a functional *IRATEMONK* firmware implant for a drive type should be possible for a single individual in approximately 4 to 6 months of full-time work:
 
-![project time requirement](intern_projects_time.png)
+<figure>
+    <a href="intern_projects_time.png" class="image-popup">
+        <img src="intern_projects_time.png" alt="project time requirement">
+    </a>
+</figure>
 
 # Implant
 
 The design of the firmware implant is detailed in the [intern projects](#introduction) document. It's described as a single *algorithm* implemented for each drive type in assembly and C code, with that assembled and compiled code inserted into an existing firmware image:
 
-![intern projects SSD support part 1](intern_projects_ssd_part_1.png)
+<figure>
+    <a href="intern_projects_ssd_part_1.png" class="image-popup">
+        <img src="intern_projects_ssd_part_1.png" alt="intern projects SSD support part 1">
+    </a>
+</figure>
 
 Implants are *productized* and deployed as an entire *firmware image*: an original firmware package that has been modified with the implant code inserted within. A *firmware and implant database tool* with cover name *SPITEFULANGEL* maintains a catalogue of these modified firmware images for supported drive models and firmware versions:
 
-![intern projects SSD support part 4](intern_projects_ssd_part_4.png)
+<figure>
+    <a href="intern_projects_ssd_part_4.png" class="image-popup">
+        <img src="intern_projects_ssd_part_4.png" alt="intern projects SSD support part 4">
+    </a>
+</figure>
 
 # IMBIOS
 
 The [ANT catalogue page](../ant_catalogue.jpg) describes the main functionality of these firmware implants as executing a payload in the host operating system by substituting an alternate Master Boot Record (MBR) boot sector. This boot-sector payload is referred to in the [intern projects](#introduction) document as *IMBIOS* (**I**rate **M**onk BIOS?), described as specific to each individual drive type and implemented in a combination of assembly and C code:
 
-![intern projects SSD support part 2](intern_projects_ssd_part_2.png)
+<figure>
+    <a href="intern_projects_ssd_part_2.png" class="image-popup">
+        <img src="intern_projects_ssd_part_2.png" alt="intern projects SSD support part 2">
+    </a>
+</figure>
 
 The *IMBIOS* first-stage payload is given two roles: *interacting with the firmware implant*, and bootstrapping the second-stage payload *SIERRAMIST*. The mention of *IMBIOS* implementations being drive-type specific implies this involves Vendor Unique Commands (VUCs). The task of *bootstrapping* likely refers to loading *SIERRAMIST* from the drive SA into memory, then initialising and executing it, while *interacting with the firmware implant* likely refers to notifying *IRATEMONK* of execution so that boot-sector substitution can be paused for the real OS bootloader to be loaded, as well as logging the execution to *persistence logs* in the SA:
 
-![persistence logs mention](intern_projects_covert_storage.png)
+<figure>
+    <a href="intern_projects_covert_storage.png" class="image-popup">
+        <img src="intern_projects_covert_storage.png" alt="persistence logs mention">
+    </a>
+</figure>
 
 The use of these *persistence logs* allows tracking of attempted and successful deployments of the payload, which also enables deployment at variable frequencies. This matches the detail in the [ANT catalogue page](../ant_catalogue.jpg) that *frequency of execution (dropping the payload) is configurable*.
 
@@ -108,11 +152,19 @@ The use of these *persistence logs* allows tracking of attempted and successful 
 
 The second-stage payload executed by [IMBIOS](#imbios) is a component with cover name *SIERRAMIST*, which appears to be a generic platform used with multiple firmware persistence techniques. The [intern projects](#introduction) document describes its various features, and seems to imply that it was in the process of being superseded by the next-generation *JUMPDOLLAR*, with various *JUMPDOLLAR* features requested to be backported:
 
-![SIERRAMIST backport projects](intern_projects_sierramist_backport.png)
+<figure>
+    <a href="intern_projects_sierramist_backport.png" class="image-popup">
+        <img src="intern_projects_sierramist_backport.png" alt="SIERRAMIST backport projects">
+    </a>
+</figure>
 
 *SIERRAMIST* appears to be designed like a miniature operating system executed before the computer's main OS: modular, with various separate *applications* that can be executed inside it. It's stored in a *partition* implemented specifically for each persistence method, a partition that can be updated separately from the firmware implant itself:
 
-![SIERRAMIST partition](intern_projects_sierramist_partition.png)
+<figure>
+    <a href="intern_projects_sierramist_partition.png" class="image-popup">
+        <img src="intern_projects_sierramist_partition.png" alt="SIERRAMIST partition">
+    </a>
+</figure>
 
 For *IRATEMONK* it's likely this partition is stored in the drive SA, the area of drive storage intended for internal firmware use.
 
@@ -128,13 +180,21 @@ The specific methods used to gain code execution through filesystem writes for t
 
 This difficulty is also acknowledged in the *intern projects* document, which requests development of a *reliable, robust, and portable* NTFS implementation, something they apparently did not have:
 
-![NTFS C code development](intern_projects_ntfs.png)
+<figure>
+    <a href="intern_projects_ntfs.png" class="image-popup">
+        <img src="intern_projects_ntfs.png" alt="NTFS C code development">
+    </a>
+</figure>
 
 As such, *CompuTrace* worked by inserting itself into space within the pre-existing file *autochk.exe*, which Windows automatically executes during boot, backing up the original *code parts* of the file to the alternate data stream `autochk.exe:BAK` without changing the file's overall size allocation[^securelist_computrace]. Having been developed in approximately the same period with the same functional goals, the NTFS code execution vector of *SIERRAMIST* likely worked similarly.
 
-For Windows targets, the method used to deploy the final payload from that initial code execution foothold is detailed in the *intern projects* document, with cover name *CASTLECRASHER*, a method they were apparently looking to develop an alternative to:
+For Windows targets, the method used to deploy the final payload from that initial code execution foothold is detailed in the *intern projects* document under the cover name *CASTLECRASHER*, a method they were apparently looking to develop an alternative to:
 
-![CASTLECRASHER description](intern_projects_castlecrasher.png)
+<figure>
+    <a href="intern_projects_castlecrasher.png" class="image-popup">
+        <img src="intern_projects_castlecrasher.png" alt="CASTLECRASHER description">
+    </a>
+</figure>
 
 From the description above it can be inferred that *CASTLECRASHER* executes in *native mode*, an early stage in the Windows boot process before full OS functionality is available. From there it executes the final payload reflectively in another process using *thread injection*, combined with *anti-stack backtracing* (a.k.a. call stack spoofing) to obscure the injected thread's origin from security products.
 
@@ -143,7 +203,7 @@ From the description above it can be inferred that *CASTLECRASHER* executes in *
 From the details covered above, the likely process by which *IRATEMONK* executes a payload in a Windows operating system can be reconstructed:
 
 * *IRATEMONK* presents the *IMBIOS* MBR boot sector to the host BIOS.
-* *IMBIOS* executes, uses VUCs to log deployment to *IRATEMONK* and load *SIERRAMIST* from the drive SA.
+* *IMBIOS* executes and uses VUCs to log deployment to *IRATEMONK* and load *SIERRAMIST* from the drive SA.
 * *SIERRAMIST* executes and writes *CASTLECRASHER* into an existing native-mode executable in the Windows NTFS partition.
 * Notified of deployment, *IRATEMONK* pauses substitution to present the real Windows boot sector.
 * The Windows boot sector executes (invoked by *IMBIOS* or *SIERRAMIST*, directly or through reboot), and Windows starts.

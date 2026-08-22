@@ -1,10 +1,12 @@
 title: Truly Crisp
+url: "https://trulycrisp.github.io"
 remote_theme: "mmistakes/minimal-mistakes@4.28.1"
 minimal_mistakes_skin: dark
 
 plugins:
 - jekyll-include-cache
 - jekyll-feed
+- jekyll-sitemap
 
 defaults:
   - scope:

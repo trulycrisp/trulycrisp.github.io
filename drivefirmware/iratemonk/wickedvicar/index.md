@@ -17,7 +17,11 @@ Although the name *WICKEDVICAR* is not used here (only its driver [SLICKERVICAR]
 
 The other internal NSA document relevant to *WICKEDVICAR*, and the only one explicitly referring to it by name, is a wiki page of project ideas for the *Persistence Division*. This document is introduced further in [IRATEMONK](../iratemonk#introduction), including heuristics dating it from roughly mid-2011 to mid-2012. Here *WICKEDVICAR* is described as *used to perform remote survey and installation* and *interacting with the firmware implant from a Windows OS*:
 
-![intern projects SSD support part 3](intern_projects_ssd_part_3.png)
+<figure>
+    <a href="intern_projects_ssd_part_3.png" class="image-popup">
+        <img src="intern_projects_ssd_part_3.png" alt="intern projects SSD support part 3">
+    </a>
+</figure>
 
 The above documents may be the only internal NSA resources related to this tool. However, there's an additional external source from antivirus vendor Kaspersky dated 2015, a [threat intelligence report](https://media.kasperskycontenthub.com/wp-content/uploads/sites/43/2018/03/08064459/Equation_group_questions_and_answers.pdf). In this report, Kaspersky described two versions of a malware component used to reprogram the firmware of HDDs and SSDs, with the filename *nls_933w.dll*.
 
@@ -492,7 +496,7 @@ For input data this operation takes a null-terminated file path and returns no o
 
 Operation ID `0x5E` handles complete Create, Read, Update, and Delete (CRUD) functionality for the [covert storage allocation](#sa-storage---allocations---covert-storage), and supports only target *covert storage* (ID 4).
 
-Unlike other allocations, which can only have their entire contents read or written at once, this provides the ability to read or write any given area within the *covert storage* allocation. As noted under [covert storage](#sa-storage---allocations---covert-storage), this appears intended as an external interface for arbitrary data storage in the drive SA, with granular sector-level access suited to a purpose such as a virtual filesystem.
+Unlike other allocations, which can only have their entire contents read or written at once, this operation provides the ability to read or write any given area within the *covert storage* allocation. As noted under [covert storage](#sa-storage---allocations---covert-storage), this appears intended as an external interface for arbitrary data storage in the drive SA, with granular sector-level access suited to a purpose such as a virtual filesystem.
 
 This operation takes variable-size input data that begins with the following structure:
 

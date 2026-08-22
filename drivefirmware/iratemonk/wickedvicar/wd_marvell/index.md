@@ -341,11 +341,19 @@ Feature | Count | LBA | Device | Command
 
 The [TREX](#trex) manual refers to this command as *VSC send key*:
 
-![VSC send key](trex_vuc_send_key.png)
+<figure>
+    <a href="trex_vuc_send_key.png" class="image-popup">
+        <img src="trex_vuc_send_key.png" alt="VSC send key">
+    </a>
+</figure>
 
 This *key* data generally follows the same format as a conventional SCT *key sector*, with an *action-code* designating the type of functionality, a *function-code* representing a specific sub-operation on that *action-code*, and additional parameter data specific to each *action* and *function* combination[^sct_spec]:
 
-![SCT key sector format](sct_key_sector.png)
+<figure>
+    <a href="sct_key_sector.png" class="image-popup">
+        <img src="sct_key_sector.png" alt="SCT key sector format">
+    </a>
+</figure>
 
 The exceptions to that generalisation are some *action-codes* that only have a single function. In these cases, the *function-code* field is missing, and the action-specific parameters begin at offset `+0x2` immediately after the *action-code* field.
 
@@ -357,7 +365,11 @@ Feature | Count | LBA | Device | Command
 
 The TREX manual refers to this command as *VSC data in* or *VSC data out*:
 
-![VSC data description](trex_vuc_data.png)
+<figure>
+    <a href="trex_vuc_data.png" class="image-popup">
+        <img src="trex_vuc_data.png" alt="VSC data description">
+    </a>
+</figure>
 
 ## VUCs - Enabling
 
@@ -373,7 +385,11 @@ Feature | Count | LBA | Device | Command
 
 The [TREX](#trex) manual refers to this command as *VSC enable*:
 
-![VSC enable description](trex_vuc_enable.png)
+<figure>
+    <a href="trex_vuc_enable.png" class="image-popup">
+        <img src="trex_vuc_enable.png" alt="VSC enable description">
+    </a>
+</figure>
 
 An interesting artefact in the *WICKEDVICAR* implementation here is the *count* register value of `0xB`. This value is not necessary for the command and is not used in TREX or any other WD-developed tools such as *wdidle3*, which leave that register unset. It does, however, appear in many [third-party public implementations](https://forum.hddguru.com/viewtopic.php?f=1&t=8374&p=69316) circulating since the 2000s, which may indicate this was developed at least partially through research into public information, rather than entirely from internal WD sources.
 
@@ -401,7 +417,11 @@ This is the most interesting method of them all. This command is never used in T
 
 SA files can be read or written through VUC action-code 8 (*file*), with function-code 1 (*read*) to read a file or 2 (*write*) to write it, described in the [TREX](#trex) manual as reading or writing a *resident file*:
 
-![VUC write file description](trex_vuc_write_file.png)
+<figure>
+    <a href="trex_vuc_write_file.png" class="image-popup">
+        <img src="trex_vuc_write_file.png" alt="VUC write file description">
+    </a>
+</figure>
 
 These read and write operations both have implementations in TREX script *eng.trx*:
 
@@ -490,13 +510,17 @@ Offset | Size | Type | Description
 
 As the above TREX script shows, the file ID parameter appears to always take up 16 bits, even for pre-ROYL drives, where file IDs are only 8-bit.
 
-For reading the file size is determined by executing the read VUC with no data transfer, and than retreiving the resulting *LBA* ATA register. The high 16-bits of that 24-bit register is the total file size in 512-byte sectors.
+For reading, the file size is determined by executing the read VUC with no data transfer, and then retrieving the resulting *LBA* ATA register. The high 16 bits of that 24-bit register are the total file size in 512-byte sectors.
 
 ## VUCs - Reverse Translate
 
 The drive can convert a given CHS address to the corresponding block address using VUC action-code 22 (*RevXlate* or *reverse translate*) with no function-code, described in the [TREX](#trex) manual as *return the logical LBA from the current physical CHS*:
 
-![VUC reverse translate description](trex_vuc_revxlate.png)
+<figure>
+    <a href="trex_vuc_revxlate.png" class="image-popup">
+        <img src="trex_vuc_revxlate.png" alt="VUC reverse translate description">
+    </a>
+</figure>
 
 This *reverse translate* VUC has the following implementation in TREX script *eng.trx*:
 
@@ -767,7 +791,11 @@ Offset | Size | Type | Value | Description
 
 The [TREX](#trex) manual describes this action-code as getting a *table*:
 
-![VUC get table description](trex_vuc_get_table.png)
+<figure>
+    <a href="trex_vuc_get_table.png" class="image-popup">
+        <img src="trex_vuc_get_table.png" alt="VUC get table description">
+    </a>
+</figure>
 
 The specific table retrieved, ID 1, is named either *physical parameters* or simply *data table* throughout TREX. The TREX script *eng.trx* details the extensive structure of this table:
 
@@ -904,7 +932,11 @@ The method's *sector* parameter is simply added to the above *sector* field, the
 
 These CHS values are then used with VUC action-code 12 (*CHS*) function-code 1 (*read with relocations*), described in the [TREX](#trex) manual as *read a virtual C/H/S & B location*:
 
-![VUC read CHS description](trex_vuc_read_chs.png)
+<figure>
+    <a href="trex_vuc_read_chs.png" class="image-popup">
+        <img src="trex_vuc_read_chs.png" alt="VUC read CHS description">
+    </a>
+</figure>
 
 This VUC also has an implementation in TREX script *eng.trx*:
 
@@ -1639,5 +1671,5 @@ The ROYL-ABA implementation is the most interesting and divergent of them all, a
 The ROYL-ABA code appears to be the work of an author with access to detailed technical documentation on the drive internals, but with a shallow understanding of how the underlying system works. It's unclear, however, whether such documentation originated from another NSA researcher, from proprietary Western Digital specifications, or from some other source.
 
 [^sct_spec]: https://web.archive.org/web/20071013061709if_/http://www.t10.org/t13/docs2005/DT1701r5-SCT.pdf
-[^pc3000_manual]: https://trulycrisp.github.io/drivefirmware/iratemonk/wickedvicar/wd_marvell/pc3000_manual.pdf
+[^pc3000_manual]: pc3000_manual.pdf
 [^kaspersky_equationgroup]: https://media.kasperskycontenthub.com/wp-content/uploads/sites/43/2018/03/08064459/Equation_group_questions_and_answers.pdf
